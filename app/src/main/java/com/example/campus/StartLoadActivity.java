@@ -14,6 +14,9 @@ public class StartLoadActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_start_load);
+        if (getSupportActionBar()!= null){
+            getSupportActionBar().hide();
+        }
 
 
         Intent i = new Intent(this, LoginActivity.class);

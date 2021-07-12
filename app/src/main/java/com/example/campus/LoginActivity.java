@@ -25,6 +25,9 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
+        if (getSupportActionBar()!= null){
+            getSupportActionBar().hide();
+        }
         if (ParseUser.getCurrentUser() != null){
             goMainActivity();
         }
@@ -48,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void loginUser(String username, String password) {
         ParseUser.logInInBackground(username, password, new LogInCallback() {
+
             @Override
             public void done(ParseUser user, ParseException e) {
                 if (e!=null){
@@ -64,9 +68,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
 
+
     }
+
     private void goMainActivity(){
-        Intent i = new Intent(this , HomeFragment.class);
+        Log.i(TAG, "went to main activity");
+        Intent i = new Intent(this , MainActivity.class);
         startActivity(i);
         finish();
     }
