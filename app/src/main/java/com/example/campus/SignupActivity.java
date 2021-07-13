@@ -16,7 +16,6 @@ import com.parse.ParseUser;
 import com.parse.SignUpCallback;
 
 public class SignupActivity extends AppCompatActivity {
-    public static final String TAG ="SignUpActivity";
     private EditText etNewUsername;
     private EditText etNewPassword;
     private Button btnSignUp;
@@ -48,10 +47,11 @@ public class SignupActivity extends AppCompatActivity {
         etIg = findViewById(R.id.etIg);
 
         btnSignUp = findViewById(R.id.btnSignUp);
+
+        // on click handler for sign up button
         btnSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.i(TAG, "OnClick Sign Up Button");
                 String username= etNewUsername.getText().toString();
                 String password = etNewPassword.getText().toString();
                 String email = etEmail.getText().toString();
@@ -62,11 +62,12 @@ public class SignupActivity extends AppCompatActivity {
                 String ig = etIg.getText().toString();
                 signupUser( username,  password, email,full_name,  grad_date,
                          major, about,  ig);
-                Log.i(TAG, "Signed Up");
             }
         });
     }
 
+
+    // sign up function
     private void signupUser(String username, String password, String email, String full_name, String grad_date,
                             String major, String about, String ig) {
         // Create the ParseUser
@@ -87,13 +88,12 @@ public class SignupActivity extends AppCompatActivity {
                 if (e == null) {
                     // Hooray! Let them use the app now.
                     goMainActivity();
-                    Log.i(TAG, "went to main activity");
                     Toast.makeText(SignupActivity.this, "Success!", Toast.LENGTH_SHORT).show();
 
                 } else {
                     // Sign up didn't succeed. Look at the ParseException
                     // to figure out what went wrong
-                    Toast.makeText(SignupActivity.this, "Wrong Username or Password", Toast.LENGTH_SHORT);
+                    Toast.makeText(SignupActivity.this, "Something's wrong :(", Toast.LENGTH_SHORT);
                     return;
                 }
             }
@@ -103,9 +103,8 @@ public class SignupActivity extends AppCompatActivity {
     }
 
 
-
+    // go to the main activity after Sign Up
     private void goMainActivity(){
-        Log.i(TAG, "went to main activity");
         Intent i = new Intent(this , MainActivity.class);
         startActivity(i);
         finish();
