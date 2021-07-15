@@ -105,7 +105,7 @@ public class SignupActivity extends AppCompatActivity {
 
     // go to the main activity after Sign Up
     private void goMainActivity(){
-        Intent i = new Intent(this , MainActivity.class);
+        Intent i = new Intent(this , ChatActivity.class);
         startActivity(i);
         finish();
     }

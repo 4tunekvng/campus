@@ -3,4 +3,13 @@
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
+    <string name="message_hint">Say anything</string>
+    <string name="send">Send</string>
+    <string name="profile_me">My Profile Pic</string>
+    <string name="profile_other">Other profile pic</string>
+    <string name="facebook_app_id">1105092443227616</string>
+    <string name="facebook_client_token">623d873d95d38c2a674a7d70edcde9a1</string>
+    <string name="fb_login_protocol_scheme">fb1105092443227616</string>
+
+
 </resources>

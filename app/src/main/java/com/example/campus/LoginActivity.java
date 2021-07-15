@@ -70,7 +70,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // go to main activity class
     private void goMainActivity(){
-        Intent i = new Intent(this , MainActivity.class);
+        Intent i = new Intent(this , ChatActivity.class);
         startActivity(i);
         finish();
     }

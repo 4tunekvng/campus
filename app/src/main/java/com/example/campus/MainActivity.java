@@ -11,6 +11,7 @@ import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
 import com.example.campus.databinding.ActivityMainBinding;
+import com.facebook.FacebookSdk;
 
 public class MainActivity extends AppCompatActivity {
 
