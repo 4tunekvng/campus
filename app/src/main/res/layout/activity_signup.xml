@@ -191,6 +191,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <TextView
+        android:id="@+id/tvSignIn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Log In"
@@ -199,7 +200,8 @@
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/new_footer_line"
-        app:layout_constraintVertical_bias="0.823" />
+        app:layout_constraintVertical_bias="0.823"
+        android:onClick="to_signin"/>
 
     <TextView
         android:id="@+id/facebook_signup"

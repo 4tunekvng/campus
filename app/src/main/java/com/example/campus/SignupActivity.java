@@ -2,12 +2,15 @@ package com.example.campus;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.parse.LogInCallback;
@@ -107,6 +110,15 @@ public class SignupActivity extends AppCompatActivity {
     private void goMainActivity(){
         Intent i = new Intent(this , ChatActivity.class);
         startActivity(i);
+        finish();
+    }
+
+    // handle on click text view
+    public void to_signin(View v){
+        TextView tvSignIn = findViewById(R.id.tvSignIn);
+        tvSignIn.setTextColor(Color.BLUE);
+        Intent to_signin = new Intent(this , LoginActivity.class);
+        startActivity(to_signin);
         finish();
     }
 

@@ -13,6 +13,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import com.facebook.AccessToken;
+import com.facebook.login.LoginManager;
+import com.facebook.login.LoginResult;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseAnonymousUtils;
@@ -25,6 +28,7 @@ import com.parse.SaveCallback;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -42,6 +46,7 @@ public class ChatActivity extends AppCompatActivity {
     ArrayList mMessages;
     Boolean mFirstLoad;
     ChatAdapter mAdapter;
+    private Object LoginResult;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +55,8 @@ public class ChatActivity extends AppCompatActivity {
         // User login
         if (ParseUser.getCurrentUser() != null) { // start with existing user
             startWithCurrentUser();
-        } else { // If not logged in, login as a new anonymous user
+        }
+        else { // If not logged in, login as a new anonymous user
             login();
         }
 
