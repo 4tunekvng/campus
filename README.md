@@ -29,43 +29,68 @@ OnCampus is an interface based social media app for school campuses that aims to
 
 * Multiple Views
    * Home page view showing all the clubs within the current users community
-   * A profile page to see and edit the Users information, groups they are a part of, people they share interests with and communities they are a part of, as well as take a new profile picture.
+   * A profile page for each user to see and edit the Users information, groups they are a part of, people they share interests with and communities they are a part of, as well as take a new profile picture.
    * A chat for each group
    * A sign up and a Log in view 
    * Search view to search for new groups
    * A Notifications Menu 
-* ...
+* Login And Sign Up
+    * User can sign up and log in, user can also opt to sign up or sign in from Facebook!
+* Interacts with Parse server to store club and User information
+* Integrates the Facebook Graph Api to add groups within communities on Facebook to the app
+* The Groups would fill into the home page in an animated format
+* Zoom into map gesture
+* Visual polish library must be used(not yet determined)
+* Prevent overlapping of group views on screen
+
 
 **Optional Nice-to-have Stories**
 
-* [fill in your required user stories here]
-* ...
+* Multiple chats for single clubs
+* Name of the Club on the ActionBar: Create Toolbar and use setTitle function to put in the name of the club
+* Different Maps for different Campuses
+* Find and chat with specific users
+* pagination 
+* Like a message 
+* Profile pic in chat only shows up at the individual’s last message
+* Language change functionality
+
 
 ### 2. Screen Archetypes
 
-* [list first screen here]
-   * [list associated required story here]
-   * ...
-* [list second screen here]
-   * [list associated required story here]
-   * ...
+* Login 
+* Register - User signs up or logs into their account
+   * Upon Download/Reopening of the application, the user is prompted to log in to gain access to their profile information. 
+   * If user is new, user can sign up by clicking a button to the SignUp activity
+   * User can also sign up via Facebook 
+   
+* Messaging Screen - Chat for users to communicate 
+   * User can now chat with other users in the same group
+* Profile Screen 
+   * User can upload new profile photo, edit their profile, their interests, and see groups they are part of, and people they share interests with.
+* Home screen
+   * Users can see all the groups on their campus. They can get into group chats by clicking on the group icon on the home screen
+* Search screen 
+   * User can search through a list of the groups
+* Notifications screen
+    * User can see notifications of messages or events
 
 ### 3. Navigation
 
 **Tab Navigation** (Tab to Screen)
 
-* [fill out your first tab]
-* [fill out your second tab]
-* [fill out your third tab]
+* Home 
+* Search for Groups 
+* Notifications
+* User Profile
 
 **Flow Navigation** (Screen to Screen)
 
-* [list first screen here]
-   * [list screen navigation here]
-   * ...
-* [list second screen here]
-   * [list screen navigation here]
-   * ...
+* Home 
+   * Search 
+   * Chat 
+   * Notifications
+   * Profile 
 
 ## Wireframes
 [Add picture of your hand sketched wireframes in this section]
