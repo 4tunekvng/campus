@@ -13,11 +13,18 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.example.campus.ChatActivity;
+import com.example.campus.Club;
+import com.example.campus.Message;
 import com.example.campus.databinding.FragmentSearchBinding;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.parse.FindCallback;
+import com.parse.ParseException;
+import com.parse.ParseQuery;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -36,11 +43,8 @@ public class SearchFragment extends Fragment {
     private JSONObject obj;
     private Context thiscontext;
     private JSONArray largeArray= new JSONArray();
-    HashMap<String, JSONObject> map = new HashMap<String, JSONObject>();
+    ArrayList allClubs = new ArrayList<>();
 
-    public static SearchFragment newInstance() {
-        return new SearchFragment();
-    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
@@ -50,16 +54,17 @@ public class SearchFragment extends Fragment {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+        queryClubs();
 
         return root;
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-        mViewModel = new ViewModelProvider(this).get(SearchViewModel.class);
-        // TODO: Use the ViewModel
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
     }
+
     static String getJsonFromAssets(Context context, String fileName) {
         String jsonString;
         try {
@@ -78,5 +83,29 @@ public class SearchFragment extends Fragment {
 
         return jsonString;
     }
+
+    void queryClubs() {
+        ParseQuery<Club> query = ParseQuery.getQuery(Club.class);
+        // limit query to latest 20 items
+        query.setLimit(20);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<Club>() {
+            public void done(List<Club> clubs, ParseException e) {
+                if (e == null) {
+                    allClubs.clear();
+                    allClubs.addAll(clubs);
+                }
+                else {
+                    Toast.makeText(thiscontext, "Error Loading Clubs" +e.toString(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+
+
 
 }
