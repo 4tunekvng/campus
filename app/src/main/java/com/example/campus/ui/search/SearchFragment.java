@@ -1,5 +1,7 @@
 package com.example.campus.ui.search;
 
+import androidx.appcompat.widget.SearchView;
+import androidx.core.view.MenuItemCompat;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Context;
@@ -11,12 +13,17 @@ import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.Toolbar;
 
 import com.example.campus.ChatActivity;
 import com.example.campus.Club;
@@ -49,7 +56,7 @@ public class SearchFragment extends Fragment {
     private Context thiscontext;
     private JSONArray largeArray= new JSONArray();
     ArrayList allClubs = new ArrayList<>();
-    private ListView lvBooks;
+    private ListView lvClubs;
     private ClubAdapter clubAdapter;
 
 
@@ -60,20 +67,19 @@ public class SearchFragment extends Fragment {
                              @Nullable Bundle savedInstanceState) {
         thiscontext = container.getContext();
 
+
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
 
-        final ListView lvBooks = binding.lvGroups;
+        final ListView lvClubs = binding.lvGroups;
         clubAdapter = new ClubAdapter(thiscontext, allClubs);
-
         // set Adapter
-        lvBooks.setAdapter(clubAdapter);
-
-        //query Parse for clubs
-        queryClubs();
+        lvClubs.setAdapter(clubAdapter);
 
 
+
+        setHasOptionsMenu(true);
         return root;
     }
 
@@ -83,27 +89,12 @@ public class SearchFragment extends Fragment {
         binding = null;
     }
 
-    static String getJsonFromAssets(Context context, String fileName) {
-        String jsonString;
-        try {
-            InputStream is = context.getAssets().open(fileName);
 
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
+    private void queryClubs(String searchQuery) {
 
-            jsonString = new String(buffer, "UTF-8");
-        } catch (IOException e) {
-            e.printStackTrace();
-            return null;
-        }
-
-        return jsonString;
-    }
-
-    void queryClubs() {
         ParseQuery<Club> query = ParseQuery.getQuery(Club.class);
+        // find the search query
+        query.whereFullText("name" ,searchQuery);
         // limit query to latest 20 items
         query.setLimit(20);
         // order posts by creation date (newest first)
@@ -122,6 +113,37 @@ public class SearchFragment extends Fragment {
                 }
             }
         });
+
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater menuInflater) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        menuInflater.inflate(R.menu.menu_club_list, menu);
+        final MenuItem searchItem = menu.findItem(R.id.action_search);
+        final SearchView searchView = (SearchView) MenuItemCompat.getActionView(searchItem);
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                // Fetch the data remotely
+                //query Parse for clubs
+                queryClubs(query);
+                // Reset SearchView
+                searchView.clearFocus();
+                searchView.setQuery("", false);
+                searchView.setIconified(true);
+                searchItem.collapseActionView();
+                // Set activity title to search query
+                getActivity().setTitle(query);
+                return true;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                return false;
+            }
+        });
+
     }
 
 
