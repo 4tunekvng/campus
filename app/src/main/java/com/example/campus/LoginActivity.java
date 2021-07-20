@@ -2,6 +2,7 @@ package com.example.campus;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -141,7 +142,7 @@ public class LoginActivity extends AppCompatActivity {
 
     // go to main activity class
     private void goMainActivity(){
-        Intent i = new Intent(LoginActivity.this , ChatActivity.class);
+        Intent i = new Intent(LoginActivity.this , MainActivity.class);
         startActivity(i);
         finish();
     }

@@ -15,6 +15,7 @@ public class ParseApplication extends Application {
         super.onCreate();
 
         ParseObject.registerSubclass(Message.class);
+        ParseObject.registerSubclass(Club.class);
         // Use for monitoring Parse network traffic
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();
@@ -23,7 +24,10 @@ public class ParseApplication extends Application {
         // any network interceptors must be added with the Configuration Builder given this syntax
         builder.networkInterceptors().add(httpLoggingInterceptor);
 
+
+
         // Set applicationId and server based on the values in the Back4App settings.
+
 
         Parse.initialize(new Parse.Configuration.Builder(this)
                         .applicationId("RQcFkxORLNTdGO6Paq5tBUObHAY4w2pArc001ceK")

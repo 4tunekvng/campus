@@ -124,11 +124,12 @@ public class ChatActivity extends AppCompatActivity {
         // Construct query to execute
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
         // Configure limit and sort order
-        query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
+        query.orderByDescending("createdAt");
         query.include(Message.USER_KEY);
 
         // get the latest 50 messages, order will show up newest to oldest of this group
-        query.orderByDescending("createdAt");
+
+        query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
         // Execute query to fetch all messages from Parse asynchronously
         // This is equivalent to a SELECT query with SQL
         query.findInBackground(new FindCallback<Message>() {
