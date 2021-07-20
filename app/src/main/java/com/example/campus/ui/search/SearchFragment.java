@@ -13,11 +13,16 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.campus.ChatActivity;
 import com.example.campus.Club;
+import com.example.campus.ClubAdapter;
 import com.example.campus.Message;
+import com.example.campus.R;
 import com.example.campus.databinding.FragmentSearchBinding;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
@@ -44,6 +49,10 @@ public class SearchFragment extends Fragment {
     private Context thiscontext;
     private JSONArray largeArray= new JSONArray();
     ArrayList allClubs = new ArrayList<>();
+    private ListView lvBooks;
+    private ClubAdapter clubAdapter;
+
+
 
 
     @Override
@@ -54,7 +63,16 @@ public class SearchFragment extends Fragment {
         binding = FragmentSearchBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
+
+        final ListView lvBooks = binding.lvGroups;
+        clubAdapter = new ClubAdapter(thiscontext, allClubs);
+
+        // set Adapter
+        lvBooks.setAdapter(clubAdapter);
+
+        //query Parse for clubs
         queryClubs();
+
 
         return root;
     }
@@ -96,6 +114,7 @@ public class SearchFragment extends Fragment {
                 if (e == null) {
                     allClubs.clear();
                     allClubs.addAll(clubs);
+                    clubAdapter.notifyDataSetChanged();
                 }
                 else {
                     Toast.makeText(thiscontext, "Error Loading Clubs" +e.toString(),
