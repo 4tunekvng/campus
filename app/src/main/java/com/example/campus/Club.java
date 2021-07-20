@@ -49,12 +49,12 @@ public class Club extends ParseObject {
         return getString(icon);
     }
 
-    public String getPicture() {
-        return getString(picture);
+    public JSONObject getPicture() {
+        return getJSONObject(picture);
     }
 
-    public String getCover() {
-        return getString(cover);
+    public JSONObject getCover() {
+        return getJSONObject(cover);
     }
 
 
@@ -130,7 +130,7 @@ public class Club extends ParseObject {
         }
     }
 
-    public void setPicture(String newPicture) {
+    public void setPicture(JSONObject newPicture) {
 
         if (newPicture!=null){
             put(picture,newPicture);
@@ -140,7 +140,7 @@ public class Club extends ParseObject {
         }
     }
 
-    public void setCover(String newCover) {
+    public void setCover(JSONObject newCover) {
         put(cover,newCover);
         if (newCover!=null){
             put(cover,newCover);

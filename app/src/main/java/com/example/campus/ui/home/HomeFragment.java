@@ -26,8 +26,11 @@ import com.example.campus.databinding.FragmentHomeBinding;
 import com.facebook.AccessToken;
 import com.facebook.GraphRequest;
 import com.facebook.GraphResponse;
+import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
+import com.parse.ParseQuery;
 import com.parse.SaveCallback;
 
 import org.json.JSONException;
@@ -38,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URI;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class HomeFragment extends Fragment {
@@ -45,6 +49,7 @@ public class HomeFragment extends Fragment {
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     Context thiscontext;
+    List<ParseObject> clubLists = new ArrayList<ParseObject>();
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -112,12 +117,14 @@ public class HomeFragment extends Fragment {
 
                                     JSONObject picture = (JSONObject) responsefromgraphapi.get("picture");
                                     JSONObject pictureData = (JSONObject) picture.get("data");
-                                    club.setPicture((String) pictureData.get("url"));
+                                    club.setPicture(pictureData);
 
                                     if (responsefromgraphapi.has("cover")){
                                         JSONObject cover = (JSONObject) responsefromgraphapi.get("cover");
-                                        club.setCover((String) cover.get("source"));
+                                        club.setCover(cover);
                                     }
+
+                                    // implement get List of clubs already in Parse from Facebook here
 
 
                                     // save to Parse
@@ -135,6 +142,8 @@ public class HomeFragment extends Fragment {
                                         }
                                     });
 
+
+
                                 } catch (JSONException e) {
                                     e.printStackTrace();
                                 }
@@ -143,6 +152,9 @@ public class HomeFragment extends Fragment {
             } catch (JSONException e) {
                 e.printStackTrace();
             }
+            // skip elements that are already in Parse here
+
+
 
             Bundle parameters = new Bundle();
             parameters.putString("fields", "name,description,id,parent,icon,picture,cover");
@@ -151,6 +163,7 @@ public class HomeFragment extends Fragment {
 
 
         }
+
 
         return root;
 
