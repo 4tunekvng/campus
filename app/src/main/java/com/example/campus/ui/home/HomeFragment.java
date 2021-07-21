@@ -65,6 +65,13 @@ public class HomeFragment extends Fragment {
 
         // create JSONobject of facebook ids in Northwestern parent
         JSONObject obj = null;
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        float height = displayMetrics.heightPixels+ getNavigationBarHeight() +100;
+        float width = displayMetrics.widthPixels-50;
+
+        RelativeLayout rl = binding.homelayout;
+
         try {
             obj = new JSONObject(getJsonFromAssets(thiscontext, "campusgroups.json"));
         } catch (JSONException e) {
@@ -163,6 +170,27 @@ public class HomeFragment extends Fragment {
 //
 //
 //        }
+        for  (int i = 0; i<obj.names().length();i++) {
+            ImageButton ib = new ImageButton(thiscontext);
+            ib.setBackgroundColor(Color.rgb(147,112,219));
+            Drawable myDrawable = getResources().getDrawable(R.drawable.instagram_home_filled_24);
+            //ib.setImageDrawable(myDrawable);
+            ArrayList<Float> sample = new ArrayList<Float>();
+            sample = sample(width, height);
+            Log.d("dip", String.valueOf(sample));
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+
+            params.leftMargin = Math.round(sample.get(0));
+            params.topMargin = Math.round(sample.get(1));
+            //params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            //params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            RelativeLayout.LayoutParams btnBarParams = new RelativeLayout.LayoutParams(Math.round(width),Math.round(height));
+            btnBarParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+            //btnBarParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+            rl.setLayoutParams(btnBarParams);
+            rl.addView(ib, params);
+        }
+
 
 
         return root;
@@ -195,6 +223,38 @@ public class HomeFragment extends Fragment {
 
         return jsonString;
     }
+
+    protected ArrayList<Float> sample(float width, float height) {
+        Random rand = new Random();
+        Random rand1 = new Random();
+        ArrayList<Float> list = new ArrayList<Float>();
+        float newrand = rand.nextFloat();
+        float newrand1 = rand1.nextFloat();
+        Log.d("dip", String.valueOf(newrand));
+        Log.d("dip", String.valueOf(newrand1));
+        list.add( newrand* width);
+        list.add(newrand1 * height);
+        return list;
+    }
+
+
+    private int getNavigationBarHeight() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+            DisplayMetrics metrics = new DisplayMetrics();
+            getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
+            int usableHeight = metrics.heightPixels;
+            getActivity().getWindowManager().getDefaultDisplay().getRealMetrics(metrics);
+            int realHeight = metrics.heightPixels;
+            if (realHeight > usableHeight)
+                return realHeight - usableHeight;
+            else
+                return 0;
+        }
+        return 0;
+    }
+
+    
+
 
 
 }
