@@ -50,6 +50,8 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
     private Context thiscontext;
     List<ParseObject> clubLists = new ArrayList<ParseObject>();
+    List<Club> allClubs= new ArrayList<>();
+
 
 
     public View onCreateView(@NonNull LayoutInflater inflater,
@@ -70,107 +72,33 @@ public class HomeFragment extends Fragment {
         float height = displayMetrics.heightPixels+ getNavigationBarHeight() +100;
         float width = displayMetrics.widthPixels-50;
 
-        RelativeLayout rl = binding.homelayout;
+
 
         try {
             obj = new JSONObject(getJsonFromAssets(thiscontext, "campusgroups.json"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
+        if (obj == null){
+            return root;
+        }
 
-        // loop through all the ids in the json object and create a new Club for each id, and send info to parse server
-//        for  (int i = 0; i<obj.names().length();i++) {
-//
-//            JSONObject jsonObject = null;
-//            Integer size = null;
-//
-//            try {
-//                jsonObject = (JSONObject) obj.get(obj.names().getString(i));
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                size = Integer.parseInt((String) jsonObject.get("size"));
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//
-//
-//            // create new club
-//            Club club = new Club();
-//            club.setSize(size);
-//
-//            // query facebook api for information about the ids in obj
-//            GraphRequest request = new GraphRequest();
-//            try {
-//                request = GraphRequest.newGraphPathRequest(
-//                        AccessToken.getCurrentAccessToken(),
-//                        "/"+jsonObject.get("id"),
-//                        new GraphRequest.Callback() {
-//                            @Override
-//                            public void onCompleted(GraphResponse response) {
-//                                // Insert your code here
-//                                JSONObject responsefromgraphapi = response.getJSONObject();
-//
-//                                try {
-//                                    // set values from api response into the new club (an instance of Club class)
-//                                    club.setName((String) responsefromgraphapi.get("name"));
-//                                    if (responsefromgraphapi.has("description")){
-//                                        club.setAbout((String) responsefromgraphapi.get("description"));
-//                                    }
-//                                    club.setCampus((JSONObject) responsefromgraphapi.get("parent"));
-//                                    club.setId((String) responsefromgraphapi.get("id"));
-//                                    club.setIcon((String) responsefromgraphapi.get("icon"));
-//
-//                                    JSONObject picture = (JSONObject) responsefromgraphapi.get("picture");
-//                                    JSONObject pictureData = (JSONObject) picture.get("data");
-//                                    club.setPicture(pictureData);
-//
-//                                    if (responsefromgraphapi.has("cover")){
-//                                        JSONObject cover = (JSONObject) responsefromgraphapi.get("cover");
-//                                        club.setCover(cover);
-//                                    }
-//
-//                                    // implement get List of clubs already in Parse from Facebook here
-//
-//
-//                                    // save to Parse
-//                                    club.saveInBackground(new SaveCallback() {
-//                                        @Override
-//                                        public void done(ParseException e) {
-//                                            if (e == null) {
-//                                                Toast.makeText(thiscontext, "Successfully created club on Parse",
-//                                                        Toast.LENGTH_SHORT).show();
-//                                            } else {
-//                                                Toast.makeText(thiscontext, "Failed to save club" +e.toString(),
-//                                                        Toast.LENGTH_SHORT).show();
-//                                                e.printStackTrace();
-//                                            }
-//                                        }
-//                                    });
-//
-//
-//
-//                                } catch (JSONException e) {
-//                                    e.printStackTrace();
-//                                }
-//                            }
-//                        });
-//            } catch (JSONException e) {
-//                e.printStackTrace();
-//            }
-//            // skip elements that are already in Parse here
-//
-//
-//
-//            Bundle parameters = new Bundle();
-//            parameters.putString("fields", "name,description,id,parent,icon,picture,cover");
-//            request.setParameters(parameters);
-//            request.executeAsync();
-//
-//
-//        }
-        for  (int i = 0; i<obj.names().length();i++) {
+
+        createButtons(width,height, obj);
+        return root;
+
+
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        binding = null;
+    }
+
+    public void createButtons(float width, float height, JSONObject obj ){
+        RelativeLayout rl = binding.homelayout;
+        for  (int i = 0; i<obj.length();i++) {
             ImageButton ib = new ImageButton(thiscontext);
             ib.setBackgroundColor(Color.rgb(147,112,219));
             Drawable myDrawable = getResources().getDrawable(R.drawable.instagram_home_filled_24);
@@ -190,18 +118,6 @@ public class HomeFragment extends Fragment {
             rl.setLayoutParams(btnBarParams);
             rl.addView(ib, params);
         }
-
-
-
-        return root;
-
-
-    }
-
-    @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        binding = null;
     }
 
     // function to get JSON file from assets
@@ -253,7 +169,26 @@ public class HomeFragment extends Fragment {
         return 0;
     }
 
-    
+    private void queryClubs(String searchQuery) {
+
+        ParseQuery<Club> query = ParseQuery.getQuery(Club.class);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<Club>() {
+            public void done(List<Club> clubs, ParseException e) {
+                if (e == null) {
+                    allClubs.clear();
+                    allClubs.addAll(clubs);
+                }
+                else {
+                    Toast.makeText(thiscontext, "Error Loading Clubs" +e.toString(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
 
 
 
