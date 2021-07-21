@@ -46,11 +46,14 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
+    public static final int BUTTON_WIDTH = 100;
+    public static final int BUTTON_HEIGHT = 100;
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private Context thiscontext;
-    List<ParseObject> clubLists = new ArrayList<ParseObject>();
     List<Club> allClubs= new ArrayList<>();
+    private float width;
+    private float height;
 
 
 
@@ -65,26 +68,26 @@ public class HomeFragment extends Fragment {
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
-        // create JSONobject of facebook ids in Northwestern parent
+        // create JSONObject of facebook ids in Northwestern parent
         JSONObject obj = null;
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        float height = displayMetrics.heightPixels+ getNavigationBarHeight() +100;
-        float width = displayMetrics.widthPixels-50;
-
 
 
         try {
             obj = new JSONObject(getJsonFromAssets(thiscontext, "campusgroups.json"));
         } catch (JSONException e) {
             e.printStackTrace();
-        }
-        if (obj == null){
             return root;
         }
 
+        // query clubs
+        queryClubs();
 
-        createButtons(width,height, obj);
+        // assign values for height and width of screen
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        height = displayMetrics.heightPixels+ getNavigationBarHeight() -BUTTON_HEIGHT;
+        width = displayMetrics.widthPixels-BUTTON_WIDTH/2;
+
         return root;
 
 
@@ -96,26 +99,17 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
-    public void createButtons(float width, float height, JSONObject obj ){
+    public void createButtons(int numClubs){
         RelativeLayout rl = binding.homelayout;
-        for  (int i = 0; i<obj.length();i++) {
+        for  (int i = 0; i<numClubs;i++) {
             ImageButton ib = new ImageButton(thiscontext);
             ib.setBackgroundColor(Color.rgb(147,112,219));
-            Drawable myDrawable = getResources().getDrawable(R.drawable.instagram_home_filled_24);
-            //ib.setImageDrawable(myDrawable);
-            ArrayList<Float> sample = new ArrayList<Float>();
-            sample = sample(width, height);
-            Log.d("dip", String.valueOf(sample));
-            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(100, 100);
+            ArrayList<Float> sample = getRandomPosition(width, height);
+
+            RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(BUTTON_WIDTH, BUTTON_HEIGHT);
 
             params.leftMargin = Math.round(sample.get(0));
             params.topMargin = Math.round(sample.get(1));
-            //params.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            //params.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            RelativeLayout.LayoutParams btnBarParams = new RelativeLayout.LayoutParams(Math.round(width),Math.round(height));
-            btnBarParams.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-            //btnBarParams.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-            rl.setLayoutParams(btnBarParams);
             rl.addView(ib, params);
         }
     }
@@ -140,14 +134,11 @@ public class HomeFragment extends Fragment {
         return jsonString;
     }
 
-    protected ArrayList<Float> sample(float width, float height) {
+    protected ArrayList<Float> getRandomPosition(float width, float height) {
         Random rand = new Random();
-        Random rand1 = new Random();
         ArrayList<Float> list = new ArrayList<Float>();
         float newrand = rand.nextFloat();
-        float newrand1 = rand1.nextFloat();
-        Log.d("dip", String.valueOf(newrand));
-        Log.d("dip", String.valueOf(newrand1));
+        float newrand1 = rand.nextFloat();
         list.add( newrand* width);
         list.add(newrand1 * height);
         return list;
@@ -169,7 +160,7 @@ public class HomeFragment extends Fragment {
         return 0;
     }
 
-    private void queryClubs(String searchQuery) {
+    private void queryClubs() {
 
         ParseQuery<Club> query = ParseQuery.getQuery(Club.class);
         // order posts by creation date (newest first)
@@ -180,6 +171,13 @@ public class HomeFragment extends Fragment {
                 if (e == null) {
                     allClubs.clear();
                     allClubs.addAll(clubs);
+                    // create a button for each club
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            createButtons(clubs.size());
+                        }
+                    });
                 }
                 else {
                     Toast.makeText(thiscontext, "Error Loading Clubs" +e.toString(),
@@ -189,7 +187,5 @@ public class HomeFragment extends Fragment {
         });
 
     }
-
-
 
 }
