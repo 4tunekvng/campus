@@ -85,8 +85,8 @@ public class HomeFragment extends Fragment {
         // assign values for height and width of screen
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        height = displayMetrics.heightPixels+ getNavigationBarHeight() -BUTTON_HEIGHT;
-        width = displayMetrics.widthPixels-BUTTON_WIDTH/2;
+        height = displayMetrics.heightPixels - getNavigationBarHeight() -BUTTON_HEIGHT;
+        width = displayMetrics.widthPixels-BUTTON_WIDTH;
 
         return root;
 
@@ -103,7 +103,7 @@ public class HomeFragment extends Fragment {
         RelativeLayout rl = binding.homelayout;
         for  (int i = 0; i<numClubs;i++) {
             ImageButton ib = new ImageButton(thiscontext);
-            ib.setBackgroundColor(Color.rgb(147,112,219));
+            ib.setBackgroundColor(Color.rgb(98,0,238));
             ArrayList<Float> sample = getRandomPosition(width, height);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(BUTTON_WIDTH, BUTTON_HEIGHT);
