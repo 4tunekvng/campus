@@ -46,14 +46,15 @@ import java.util.Random;
 
 public class HomeFragment extends Fragment {
 
-    public static final int BUTTON_WIDTH = 100;
-    public static final int BUTTON_HEIGHT = 100;
+    public static final int BUTTON_WIDTH = 150;
+    public static final int BUTTON_HEIGHT = 150;
     private HomeViewModel homeViewModel;
     private FragmentHomeBinding binding;
     private Context thiscontext;
     List<Club> allClubs= new ArrayList<>();
     private float width;
     private float height;
+    JSONObject jsonObject= new JSONObject();
 
 
 
@@ -99,9 +100,10 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
-    public void createButtons(int numClubs){
+    public void createButtons(List<Club> clubs, int numClubs){
         RelativeLayout rl = binding.homelayout;
         for  (int i = 0; i<numClubs;i++) {
+            JSONObject json = new JSONObject();
             ImageButton ib = new ImageButton(thiscontext);
             ib.setBackgroundColor(Color.rgb(98,0,238));
             ArrayList<Float> sample = getRandomPosition(width, height);
@@ -111,7 +113,33 @@ public class HomeFragment extends Fragment {
             params.leftMargin = Math.round(sample.get(0));
             params.topMargin = Math.round(sample.get(1));
             rl.addView(ib, params);
+            try {
+                json.put("id", clubs.get(i).getId().toString());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                json.put("left",String.valueOf(params.leftMargin));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                json.put("top",String.valueOf(params.topMargin) );
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                json.put("size", String.valueOf(clubs.get(i).getSize()));
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            try {
+                jsonObject.put(String.valueOf(clubs.get(i).getId()),json );
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
         }
+        Log.d("dip", String.valueOf(jsonObject));
     }
 
     // function to get JSON file from assets
@@ -175,7 +203,7 @@ public class HomeFragment extends Fragment {
                     getActivity().runOnUiThread(new Runnable() {
                         @Override
                         public void run() {
-                            createButtons(clubs.size());
+                            createButtons(allClubs,clubs.size());
                         }
                     });
                 }
