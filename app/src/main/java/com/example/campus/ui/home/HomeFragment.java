@@ -32,7 +32,9 @@ import com.parse.ParseFile;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.SaveCallback;
+import com.squareup.picasso.Picasso;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -43,6 +45,8 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
+import static java.lang.Integer.parseInt;
 
 public class HomeFragment extends Fragment {
 
@@ -104,42 +108,113 @@ public class HomeFragment extends Fragment {
         RelativeLayout rl = binding.homelayout;
         for  (int i = 0; i<numClubs;i++) {
             JSONObject json = new JSONObject();
-            ImageButton ib = new ImageButton(thiscontext);
-            ib.setBackgroundColor(Color.rgb(98,0,238));
+
+
             ArrayList<Float> sample = getRandomPosition(width, height);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(BUTTON_WIDTH, BUTTON_HEIGHT);
 
             params.leftMargin = Math.round(sample.get(0));
             params.topMargin = Math.round(sample.get(1));
-            rl.addView(ib, params);
-            try {
-                json.put("id", clubs.get(i).getId().toString());
-            } catch (JSONException e) {
-                e.printStackTrace();
+
+
+
+            JSONArray names = new JSONArray();
+            int nameLength;
+            if(jsonObject.names()== null){
+                ImageButton ib = new ImageButton(thiscontext);
+                try {
+                    Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                rl.addView(ib, params);
+                try {
+                    json.put("id", clubs.get(i).getId().toString());
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    json.put("left",String.valueOf(params.leftMargin));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    json.put("top",String.valueOf(params.topMargin) );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    json.put("size", String.valueOf(clubs.get(i).getSize()));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    jsonObject.put(String.valueOf(clubs.get(i).getId()),json );
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
             }
-            try {
-                json.put("left",String.valueOf(params.leftMargin));
-            } catch (JSONException e) {
-                e.printStackTrace();
+            else {
+                names =jsonObject.names();
+                nameLength= names.length();
+                boolean overlaps = false;
+                for(int a=0; a<nameLength; a++){
+                    try {
+                        if (overlaps(params.leftMargin, params.topMargin, BUTTON_WIDTH, BUTTON_HEIGHT, (JSONObject) jsonObject.get((String) names.get(a)))){
+                            i =i-1;
+                            overlaps = true;
+                            break;
+
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                }
+                if(!overlaps){
+                    ImageButton ib = new ImageButton(thiscontext);
+                    try {
+                        Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    rl.addView(ib, params);
+                    try {
+                        json.put("id", clubs.get(i).getId().toString());
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        json.put("left",String.valueOf(params.leftMargin));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        json.put("top",String.valueOf(params.topMargin) );
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        json.put("size", String.valueOf(clubs.get(i).getSize()));
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                    try {
+                        jsonObject.put(String.valueOf(clubs.get(i).getId()),json );
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+
             }
-            try {
-                json.put("top",String.valueOf(params.topMargin) );
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                json.put("size", String.valueOf(clubs.get(i).getSize()));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-            try {
-                jsonObject.put(String.valueOf(clubs.get(i).getId()),json );
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
+
+
+
         }
-        Log.d("dip", String.valueOf(jsonObject));
+
     }
 
     // function to get JSON file from assets
@@ -213,6 +288,26 @@ public class HomeFragment extends Fragment {
                 }
             }
         });
+
+    }
+
+    private boolean overlaps(int left, int top,int w,int h, JSONObject jsonObject1) {
+        boolean forLeft = false;
+        try {
+            forLeft = (left < (parseInt((String) jsonObject1.get("left")) + w)) && ((left + w) > parseInt((String) jsonObject1.get("left")));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        boolean forTop = false;
+        try {
+            forTop = top < parseInt((String) jsonObject1.get("top")) + w && top + w > parseInt((String) jsonObject1.get("top"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        return forLeft && forTop;
+
 
     }
 
