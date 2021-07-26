@@ -18,6 +18,7 @@ public class Club extends ParseObject {
     public static final String icon = "icon";
     public static final String picture = "picture";
     public static final String cover = "cover";
+    public static final String pic = "pic";
 
 
 
@@ -55,6 +56,10 @@ public class Club extends ParseObject {
 
     public JSONObject getCover() {
         return getJSONObject(cover);
+    }
+
+    public ParseFile getPic(){
+        return getParseFile(pic);
     }
 
 
@@ -141,9 +146,18 @@ public class Club extends ParseObject {
     }
 
     public void setCover(JSONObject newCover) {
-        put(cover,newCover);
+
         if (newCover!=null){
             put(cover,newCover);
+        }
+        else{
+            return;
+        }
+    }
+
+    public void setPic(ParseFile parseFile) {
+        if (parseFile!=null){
+            put(pic,parseFile);
         }
         else{
             return;
