@@ -35,12 +35,23 @@
                 android:scaleType="centerInside"
                 android:src="@drawable/ic_user" />
 
+            <ImageButton
+                android:id="@+id/ibEditProfilePic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true"
+                android:layout_marginStart="82dp"
+                android:layout_marginTop="86dp"
+                android:backgroundTint="@color/purple_200"
+                android:src="@android:drawable/ic_menu_edit" />
+
         </RelativeLayout>
 
         <TextView
             android:id="@+id/tvUsersname"
             android:layout_width="179dp"
-            android:layout_height="41dp"
+            android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_marginStart="17dp"
             android:layout_marginLeft="2dp"

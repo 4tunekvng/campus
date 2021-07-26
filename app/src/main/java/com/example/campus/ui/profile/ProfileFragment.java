@@ -2,12 +2,14 @@ package com.example.campus.ui.profile;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,6 +20,9 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.bumptech.glide.Glide;
+import com.example.campus.LoginActivity;
+import com.example.campus.MainActivity;
+import com.example.campus.UploadActivity;
 import com.example.campus.databinding.FragmentDashboardBinding;
 import com.parse.Parse;
 import com.parse.ParseUser;
@@ -44,6 +49,8 @@ public class ProfileFragment extends Fragment{
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
         ParseUser user = ParseUser.getCurrentUser();
+
+        // inflating the views with user details
         ImageView imageView = binding.profilePic;
         Glide.with(thiscontext)
                 .load(user.getParseFile("Profile_pic").getUrl())
@@ -67,22 +74,23 @@ public class ProfileFragment extends Fragment{
         JSONArray interests = user.getJSONArray("interests");
         List<String> interestsList = new ArrayList<String>();
 
-        for(int i=0; i< interests.length(); i++){
-            try {
-                interestsList.add(interests.getString(i));
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-        }
-        int size = interestsList.size();
-        String[] stringArray = interestsList.toArray(new String[size]);
 
-        String interestString = "";
-        for (String s : stringArray) {
-            interestString= interestString+s+".";
-        }
 
         if(interests!=null){
+            for(int i=0; i< interests.length(); i++){
+                try {
+                    interestsList.add(interests.getString(i));
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+            int size = interestsList.size();
+            String[] stringArray = interestsList.toArray(new String[size]);
+
+            String interestString = "";
+            for (String s : stringArray) {
+                interestString= interestString+s+".";
+            }
             tvInterests.setText(String.valueOf(interestString) );
         }
         else {
@@ -90,10 +98,21 @@ public class ProfileFragment extends Fragment{
         }
 
 
-
-
+        ImageButton ibEditProfilePic = binding.ibEditProfilePic;
+        ibEditProfilePic.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goUploadActivity();
+            }
+        });
 
         return root;
+    }
+
+    // go to Upload activity
+    private void goUploadActivity() {
+        Intent i = new Intent(thiscontext, UploadActivity.class);
+        startActivity(i);
     }
 
     @Override
