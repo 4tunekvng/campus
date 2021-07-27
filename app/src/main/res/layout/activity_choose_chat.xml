@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/announcements">
+
+    <ImageView
+        android:id="@+id/ivClubPicture"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_margin="8dp" />
+
+        <TextView
+            android:id="@+id/tvName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toRightOf="@+id/ivClubPicture"
+            android:text="Announcements"
+            android:textSize="24dp"
+            tools:text="Announcements" />
+
+    <TextView
+        android:id="@+id/tvMemberCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tvName"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/ivClubPicture"
+        android:text="MemberCount"
+        android:textSize="12dp" />
+
+    <TextView
+        android:id="@+id/tvAbout"
+        android:layout_width="match_parent"
+        android:layout_height="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:layout_marginRight="5dp"
+        android:layout_below="@+id/tvMemberCount"
+        android:layout_marginLeft="8dp"
+        android:layout_toRightOf="@+id/ivClubPicture"
+        android:text="About"
+        android:textSize="12dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/announcements"
+        android:id="@+id/chat1">
+
+        <ImageView
+            android:id="@+id/ivChatPicture"
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/purple_500"
+            app:srcCompat="@drawable/com_facebook_button_send_icon_white"
+            tools:srcCompat="@drawable/com_facebook_button_send_icon_white" />
+
+        <TextView
+            android:id="@+id/tvChatName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:layout_toRightOf="@+id/ivChatPicture"
+            android:text="Chat 1"
+            android:textSize="24dp"
+            tools:text="Chat 1" />
+
+        <TextView
+            android:id="@+id/tvChatMemberCount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tvChatName"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/ivChatPicture"
+            android:text="MemberCount"
+            android:textSize="12dp" />
+
+        <TextView
+            android:id="@+id/tvAboutChat"
+            android:layout_width="match_parent"
+            android:layout_height="15dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginBottom="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_below="@+id/tvChatMemberCount"
+            android:layout_marginLeft="8dp"
+            android:layout_toRightOf="@+id/ivChatPicture"
+            android:text="About"
+            android:textSize="12dp" />
+    </RelativeLayout>
+</RelativeLayout>

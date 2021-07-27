@@ -63,6 +63,8 @@ public class Club extends ParseObject {
     }
 
 
+
+
     public void setName(String newName) {
         if (newName!=null){
             put(name,newName);

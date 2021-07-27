@@ -1,18 +1,22 @@
 package com.example.campus;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
+import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
+import org.parceler.Parcels;
 
 import java.util.ArrayList;
 
@@ -57,6 +61,19 @@ public class ClubAdapter extends ArrayAdapter<Club> {
         } catch (JSONException e) {
             e.printStackTrace();
         }
+
+        // Relative Layout for a particular club view 
+        RelativeLayout item_clubs = (RelativeLayout)convertView.findViewById(R.id.LayoutClub);
+
+        // on click club, go to club chat
+        item_clubs.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getContext(), ChooseChatActivity.class);
+                intent.putExtra(Club.class.getSimpleName(), Parcels.wrap(club));
+                getContext().startActivity(intent);
+            }
+        });
         // Return the completed view to render on screen
         return convertView;
     }

@@ -25,6 +25,8 @@ import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
+
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
@@ -47,11 +49,14 @@ public class ChatActivity extends AppCompatActivity {
     Boolean mFirstLoad;
     ChatAdapter mAdapter;
     private Object LoginResult;
+    Club club;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_chat);
+        club = (Club) Parcels.unwrap(getIntent().getParcelableExtra(Club.class.getSimpleName()));
+
         // User login
         if (ParseUser.getCurrentUser() != null) { // start with existing user
             startWithCurrentUser();
@@ -59,6 +64,7 @@ public class ChatActivity extends AppCompatActivity {
         else { // If not logged in, login as a new anonymous user
             login();
         }
+
 
     }
 
@@ -93,6 +99,7 @@ public class ChatActivity extends AppCompatActivity {
                 Message message = new Message();
                 message.setUserId(ParseUser.getCurrentUser().getObjectId());
                 message.setUser(ParseUser.getCurrentUser());
+                message.setClub(club);
                 message.setBody(data);
 
                 message.saveInBackground(new SaveCallback() {
@@ -123,9 +130,12 @@ public class ChatActivity extends AppCompatActivity {
     void refreshMessages() {
         // Construct query to execute
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        // select only chats related to the club
+        query.whereEqualTo("club", club);
         // Configure limit and sort order
         query.orderByDescending("createdAt");
         query.include(Message.USER_KEY);
+        query.include(Message.CLUB_KEY);
 
         // get the latest 50 messages, order will show up newest to oldest of this group
 

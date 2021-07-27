@@ -1,8 +1,11 @@
 package com.example.campus.ui.home;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Movie;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
@@ -20,6 +23,8 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
+import com.example.campus.ChatActivity;
+import com.example.campus.ChooseChatActivity;
 import com.example.campus.Club;
 import com.example.campus.databinding.FragmentHomeBinding;
 import com.facebook.AccessToken;
@@ -35,6 +40,7 @@ import com.squareup.picasso.Picasso;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.parceler.Parcels;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -225,6 +231,7 @@ public class HomeFragment extends Fragment {
             int nameLength;
             if(jsonObject.names()== null){
                 ImageButton ib = new ImageButton(thiscontext);
+                Club currentClub = clubs.get(i);
                 try {
                     Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
                 } catch (JSONException e) {
@@ -256,6 +263,14 @@ public class HomeFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                ib.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent intent = new Intent(thiscontext, ChooseChatActivity.class);
+                        intent.putExtra(currentClub.getName(), Parcels.wrap(currentClub));
+                        thiscontext.startActivity(intent);
+                    }
+                });
             }
             else {
                 names =jsonObject.names();
@@ -277,6 +292,7 @@ public class HomeFragment extends Fragment {
                 }
                 if(!overlaps){
                     ImageButton ib = new ImageButton(thiscontext);
+                    Club currentClub = clubs.get(i);
                     try {
                         Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
                     } catch (JSONException e) {
@@ -308,6 +324,14 @@ public class HomeFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    ib.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(thiscontext, ChooseChatActivity.class);
+                            intent.putExtra(Club.class.getSimpleName(), Parcels.wrap(currentClub));
+                            thiscontext.startActivity(intent);
+                        }
+                    });
                 }
 
             }
