@@ -11,6 +11,8 @@
     <string name="facebook_app_id">1105092443227616</string>
     <string name="facebook_client_token">623d873d95d38c2a674a7d70edcde9a1</string>
     <string name="fb_login_protocol_scheme">fb1105092443227616</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 
 
 </resources>

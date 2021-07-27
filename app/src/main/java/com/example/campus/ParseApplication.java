@@ -29,12 +29,16 @@ public class ParseApplication extends Application {
         // Set applicationId and server based on the values in the Back4App settings.
 
 
+
+
         Parse.initialize(new Parse.Configuration.Builder(this)
                         .applicationId("RQcFkxORLNTdGO6Paq5tBUObHAY4w2pArc001ceK")
                         .clientKey("wUsKiWAWJMXiZYL4iyB6HhkGryPZsfOAJvpJswza")
                         .server("https://parseapi.back4app.com")
                         .build()
+
         );
+        ParseFacebookUtils.initialize(this);
 
     }
 }

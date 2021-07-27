@@ -1,8 +1,10 @@
 package com.example.campus.ui.profile;
 
 import android.app.ActionBar;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.audiofx.Equalizer;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider;
 import com.bumptech.glide.Glide;
 import com.example.campus.LoginActivity;
 import com.example.campus.MainActivity;
+import com.example.campus.SettingsActivity;
 import com.example.campus.UploadActivity;
 import com.example.campus.databinding.FragmentDashboardBinding;
 import com.parse.Parse;
@@ -106,6 +109,14 @@ public class ProfileFragment extends Fragment{
             }
         });
 
+        ImageButton settingButton = binding.settingButton;
+        settingButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                goSettingsActivity();
+            }
+        });
+
         return root;
     }
 
@@ -114,6 +125,12 @@ public class ProfileFragment extends Fragment{
         Intent i = new Intent(thiscontext, UploadActivity.class);
         startActivity(i);
     }
+    // go to Settings activity
+    private void goSettingsActivity() {
+        Intent i = new Intent(thiscontext, SettingsActivity.class);
+        startActivity(i);
+    }
+
 
     @Override
     public void onDestroyView() {

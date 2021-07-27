@@ -75,7 +75,8 @@ public class LoginActivity extends AppCompatActivity {
         // code below is for facebook login
         FacebookSdk.sdkInitialize(getApplicationContext());
 
-        ParseFacebookUtils.initialize(getApplicationContext());
+
+
 
         final List<String> permissions = Arrays.asList("public_profile", "email");
 
