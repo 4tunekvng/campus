@@ -1,17 +1,12 @@
 package com.example.campus.ui.home;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Movie;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,18 +18,13 @@ import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
-import com.example.campus.ChatActivity;
 import com.example.campus.ChooseChatActivity;
 import com.example.campus.Club;
+import com.example.campus.MyScaleGestures;
 import com.example.campus.databinding.FragmentHomeBinding;
-import com.facebook.AccessToken;
-import com.facebook.GraphRequest;
-import com.facebook.GraphResponse;
 import com.parse.FindCallback;
 import com.parse.ParseException;
-import com.parse.ParseFile;
 import com.parse.ParseQuery;
-import com.parse.SaveCallback;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
@@ -45,8 +35,6 @@ import org.parceler.Parcels;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -81,6 +69,7 @@ public class HomeFragment extends Fragment {
                 new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        binding.homelayout.setOnTouchListener(new MyScaleGestures(thiscontext));
 
         // create JSONObject of facebook ids in Northwestern parent
         JSONObject obj = null;
