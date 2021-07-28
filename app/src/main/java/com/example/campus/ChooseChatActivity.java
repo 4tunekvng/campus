@@ -24,6 +24,7 @@ public class ChooseChatActivity extends AppCompatActivity {
     TextView tvChatMemberCount;
     TextView tvAboutChat;
     RelativeLayout chat1;
+    RelativeLayout announcements;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +39,7 @@ public class ChooseChatActivity extends AppCompatActivity {
         tvChatMemberCount = findViewById(R.id.tvChatMemberCount);
         tvAboutChat = findViewById(R.id.tvAboutChat);
         chat1 = findViewById(R.id.chat1);
+        announcements = findViewById(R.id.announcements);
         try {
             Picasso.with(this).load(Uri.parse(String.valueOf(club.getPicture().get("url")))).fit().centerCrop().into(ivClubPicture);
         } catch (JSONException e) {
@@ -57,6 +59,16 @@ public class ChooseChatActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(ChooseChatActivity.this, ChatActivity.class);
+                intent.putExtra(Club.class.getSimpleName(), Parcels.wrap(club));
+                ChooseChatActivity.this.startActivity(intent);
+            }
+        });
+
+        // on click listener on announcements
+        announcements.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(ChooseChatActivity.this, AnnouncementsActivity.class);
                 intent.putExtra(Club.class.getSimpleName(), Parcels.wrap(club));
                 ChooseChatActivity.this.startActivity(intent);
             }

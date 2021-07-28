@@ -3,9 +3,6 @@ package com.example.campus;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.FileProvider;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,41 +21,42 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.example.campus.ui.home.HomeFragment;
-import com.example.campus.ui.profile.ProfileFragment;
 import com.parse.FindCallback;
-import com.parse.Parse;
 import com.parse.ParseException;
 import com.parse.ParseFile;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
 
+import org.parceler.Parcels;
+
 import java.io.File;
 import java.util.List;
 
-public class UploadActivity extends AppCompatActivity {
-
-    public static final String TAG = "MainActivity";
+public class CreateAnnouncementActivity extends AppCompatActivity {
+    public static final String TAG = "CreateAnnouncementsActivity";
     private EditText etDescription;
     private Button btnCaptureImage;
-    private ImageView ivPostImage;
+    private ImageView ivAnnouncementImage;
     private Button btnSubmit;
     public static final int CAPTURE_IMAGE_ACTIVITY_REQUEST_CODE = 42;
     private File photoFile;
     public String photoFileName = "photo.jpg";
-    private ImageButton homeButton;
-
+    Club club;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_upload);
+        setContentView(R.layout.activity_create_announcement);
+        club = (Club) Parcels.unwrap(getIntent().getParcelableExtra(Club.class.getSimpleName()));
 
+
+
+        etDescription = findViewById(R.id.etDescription);
         btnCaptureImage = findViewById(R.id.btnCaptureImage);
-        ivPostImage = findViewById(R.id.ivPostImage);
+        ivAnnouncementImage = findViewById(R.id.ivAnnouncementImage);
         btnSubmit = findViewById(R.id.btnSubmit);
-        homeButton = findViewById(R.id.homeButton);
 
         btnCaptureImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -70,28 +68,17 @@ public class UploadActivity extends AppCompatActivity {
         btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(photoFile==null|| ivPostImage.getDrawable()== null){
-                    Toast.makeText(UploadActivity.this,"There is no image !" , Toast.LENGTH_SHORT).show();
-                    return;
-                }
+                String description = etDescription.getText().toString();
+
                 ParseUser currentUser = ParseUser.getCurrentUser();
-                savePic(currentUser, photoFile);
-
-                FragmentManager fm = getSupportFragmentManager();
-                ProfileFragment fragment = new ProfileFragment();
-                fm.beginTransaction().add(R.id.navigation_dashboard,fragment).commit();
-
-            }
-
-        });
-        homeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // intent to go to the FeedActivity
-                Intent i = new Intent(UploadActivity.this,MainActivity.class);
+                savePost(description, currentUser, photoFile);
+                Intent i = new Intent(CreateAnnouncementActivity.this, AnnouncementsActivity.class);
                 startActivity(i);
+
             }
+
         });
+
     }
     // Returns the File for a photo stored on disk given the fileName
     public File getPhotoFileUri(String fileName){
@@ -102,7 +89,6 @@ public class UploadActivity extends AppCompatActivity {
 
         // Create the storage directory if it does not exist yet
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()){
-            Log.d(TAG, "failed to create directory");
 
         }
         // Return the file Target for the photo based on filename
@@ -119,7 +105,7 @@ public class UploadActivity extends AppCompatActivity {
         // wrap file into a content provider
 
         // required for API >= 24
-        Uri fileProvider = FileProvider.getUriForFile(UploadActivity.this, "campus.com.codepath.fileprovider", photoFile);
+        Uri fileProvider = FileProvider.getUriForFile(CreateAnnouncementActivity.this, "campus.com.codepath.fileprovider", photoFile);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, fileProvider);
         // if you call startActivityResult() using an intent that no app can handle, your app will crash
         //So long as the result is not null, it's safe to use the intent
@@ -139,26 +125,36 @@ public class UploadActivity extends AppCompatActivity {
                 Bitmap takenImage = BitmapFactory.decodeFile(photoFile.getAbsolutePath());
                 // RESIZE BITMAP, see section below
                 // Load the taken image into a preview
-                ivPostImage.setImageBitmap(takenImage);
+                ivAnnouncementImage.setImageBitmap(takenImage);
             } else { // Result was a failure
                 Toast.makeText(this, "Picture wasn't taken!", Toast.LENGTH_SHORT).show();
             }
         }
     }
 
-    private void savePic(ParseUser currentUser, File photoFile) {
-        currentUser.put("Profile_pic", new ParseFile(photoFile));
-        currentUser.saveInBackground(new SaveCallback() {
+    private void savePost(String description, ParseUser currentUser, File photoFile) {
+        Post post = new Post();
+        if(!description.isEmpty()){
+            post.setDescription(description);
+        }
+
+        if(photoFile !=null){
+            post.setImage(new ParseFile(photoFile));
+        }
+
+        post.setPoster(currentUser);
+        post.setClub(club);
+        post.saveInBackground(new SaveCallback() {
             @Override
             public void done(ParseException e) {
                 if(e!= null){
-                    Toast.makeText(UploadActivity.this, "Error while Saving!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(CreateAnnouncementActivity.this, "Error while Saving!", Toast.LENGTH_SHORT).show();
                 }
-                ivPostImage.setImageResource(0);
+                etDescription.setText(" ");
+                ivAnnouncementImage.setImageResource(0);
             }
         });
     }
-
 
 
 }

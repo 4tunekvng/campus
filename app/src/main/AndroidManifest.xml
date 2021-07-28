@@ -14,13 +14,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.campus">
-        <activity android:name=".ChooseChatActivity"></activity>
+        <activity android:name=".CreateAnnouncementActivity"></activity>
+        <activity android:name=".AnnouncementsActivity" />
+        <activity android:name=".ChooseChatActivity" />
         <activity android:name=".SettingsActivity" />
         <activity android:name=".UploadActivity" />
 
         <provider
             android:name="androidx.core.content.FileProvider"
-            android:authorities="${applicationId}.com.codepath.fileprovider"
+            android:authorities="campus.com.codepath.fileprovider"
             android:exported="false"
             android:grantUriPermissions="true">
             <meta-data

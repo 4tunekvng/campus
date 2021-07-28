@@ -234,31 +234,11 @@ public class HomeFragment extends Fragment {
                 Club currentClub = clubs.get(i);
                 try {
                     Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                rl.addView(ib, params);
-                try {
+                    rl.addView(ib, params);
                     json.put("id", clubs.get(i).getId().toString());
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
                     json.put("left",String.valueOf(params.leftMargin));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
                     json.put("top",String.valueOf(params.topMargin) );
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
                     json.put("size", String.valueOf(clubs.get(i).getSize()));
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
                     jsonObject.put(String.valueOf(clubs.get(i).getId()),json );
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -295,31 +275,11 @@ public class HomeFragment extends Fragment {
                     Club currentClub = clubs.get(i);
                     try {
                         Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    rl.addView(ib, params);
-                    try {
+                        rl.addView(ib, params);
                         json.put("id", clubs.get(i).getId().toString());
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
                         json.put("left",String.valueOf(params.leftMargin));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
                         json.put("top",String.valueOf(params.topMargin) );
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
                         json.put("size", String.valueOf(clubs.get(i).getSize()));
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                    try {
                         jsonObject.put(String.valueOf(clubs.get(i).getId()),json );
                     } catch (JSONException e) {
                         e.printStackTrace();

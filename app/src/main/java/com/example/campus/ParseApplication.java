@@ -16,6 +16,7 @@ public class ParseApplication extends Application {
 
         ParseObject.registerSubclass(Message.class);
         ParseObject.registerSubclass(Club.class);
+        ParseObject.registerSubclass(Post.class);
         // Use for monitoring Parse network traffic
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         HttpLoggingInterceptor httpLoggingInterceptor = new HttpLoggingInterceptor();

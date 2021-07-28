@@ -69,9 +69,6 @@ public class Club extends ParseObject {
         if (newName!=null){
             put(name,newName);
         }
-        else{
-            return;
-        }
     }
 
     public void setSize(Integer newSize) {
@@ -79,18 +76,12 @@ public class Club extends ParseObject {
         if (newSize!=null){
             put(size,newSize);
         }
-        else{
-            return;
-        }
     }
 
     public void setAbout(String newAbout) {
 
         if (newAbout!=null){
             put(about,newAbout);
-        }
-        else{
-            return;
         }
 
     }
@@ -100,20 +91,12 @@ public class Club extends ParseObject {
         if (newKeywords!=null){
             put(keywords,newKeywords);
         }
-        else{
-            JSONArray jsonArray = new JSONArray();
-            return;
-        }
     }
 
     public void setCampus(JSONObject newCampus) {
 
         if (newCampus!=null){
             put(campus,newCampus);
-        }
-        else{
-            JSONObject jsonObject = new JSONObject();
-            return;
         }
     }
 
@@ -122,18 +105,12 @@ public class Club extends ParseObject {
         if (newId!=null){
             put(facebookId,newId);
         }
-        else{
-            return;
-        }
     }
 
     public void setIcon(String newIcon) {
 
         if (newIcon!=null){
             put(icon,newIcon);
-        }
-        else{
-            return;
         }
     }
 
@@ -142,9 +119,6 @@ public class Club extends ParseObject {
         if (newPicture!=null){
             put(picture,newPicture);
         }
-        else{
-            return;
-        }
     }
 
     public void setCover(JSONObject newCover) {
@@ -152,17 +126,11 @@ public class Club extends ParseObject {
         if (newCover!=null){
             put(cover,newCover);
         }
-        else{
-            return;
-        }
     }
 
     public void setPic(ParseFile parseFile) {
         if (parseFile!=null){
             put(pic,parseFile);
-        }
-        else{
-            return;
         }
     }
 

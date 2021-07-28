@@ -62,7 +62,7 @@ public class ClubAdapter extends ArrayAdapter<Club> {
             e.printStackTrace();
         }
 
-        // Relative Layout for a particular club view 
+        // Relative Layout for a particular club view
         RelativeLayout item_clubs = (RelativeLayout)convertView.findViewById(R.id.LayoutClub);
 
         // on click club, go to club chat
