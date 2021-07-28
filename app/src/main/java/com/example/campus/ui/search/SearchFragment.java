@@ -80,6 +80,7 @@ public class SearchFragment extends Fragment {
 
 
         setHasOptionsMenu(true);
+        queryAllClubs();
         return root;
     }
 
@@ -95,6 +96,30 @@ public class SearchFragment extends Fragment {
         ParseQuery<Club> query = ParseQuery.getQuery(Club.class);
         // find the search query
         query.whereFullText("name" ,searchQuery);
+        // limit query to latest 20 items
+        query.setLimit(20);
+        // order posts by creation date (newest first)
+        query.addDescendingOrder("createdAt");
+        // start an asynchronous call for posts
+        query.findInBackground(new FindCallback<Club>() {
+            public void done(List<Club> clubs, ParseException e) {
+                if (e == null) {
+                    allClubs.clear();
+                    allClubs.addAll(clubs);
+                    clubAdapter.notifyDataSetChanged();
+                }
+                else {
+                    Toast.makeText(thiscontext, "Error Loading Clubs" +e.toString(),
+                            Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+    }
+
+    private void queryAllClubs() {
+
+        ParseQuery<Club> query = ParseQuery.getQuery(Club.class);
         // limit query to latest 20 items
         query.setLimit(20);
         // order posts by creation date (newest first)
