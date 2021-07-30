@@ -8,6 +8,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.paging.PagedList;
+import androidx.paging.PagedListAdapter;
+import androidx.recyclerview.widget.DiffUtil;
+import androidx.recyclerview.widget.ListAdapter;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
@@ -19,7 +23,7 @@ import java.math.BigInteger;
 import java.security.MessageDigest;
 import java.util.List;
 
-public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHolder> {
+public class ChatAdapter extends PagedListAdapter<Message,ChatAdapter.MessageViewHolder> {
 
     private List<Message> mMessages;
     private Context mContext;
@@ -28,12 +32,22 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
     private static final int MESSAGE_OUTGOING = 123;
     private static final int MESSAGE_INCOMING = 321;
 
-    public ChatAdapter(Context context, ParseUser user, String userId, List<Message> messages) {
-        mMessages = messages;
+//    public ChatAdapter(Context context, ParseUser user, String userId, List<Message> messages) {
+//        super(DIFF_CALLBACK);
+//        mMessages = messages;
+//        this.mUserId = userId;
+//        this.mUser = user;
+//        mContext = context;
+//
+//    }
+
+    public ChatAdapter(Context context, ParseUser user, String userId) {
+        super(DIFF_CALLBACK);
+        mContext = context;
         this.mUserId = userId;
         this.mUser = user;
-        mContext = context;
     }
+
 
     @Override
     public MessageViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -53,14 +67,14 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
-        Message message = mMessages.get(position);
+        Message message = getItem(position);
+        if (message == null)
+        {
+            return;
+        }
         holder.bindMessage(message);
     }
 
-    @Override
-    public int getItemCount() {
-        return mMessages.size();
-    }
 
     @Override
     public int getItemViewType(int position) {
@@ -71,7 +85,7 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         }
     }
     private boolean isMe(int position) {
-        Message message = mMessages.get(position);
+        Message message = getItem(position);
         return message.getUserId() != null && message.getUserId().equals(mUserId);
     }
 
@@ -98,12 +112,13 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
 
         @Override
         public void bindMessage(Message message) {
+
+            body.setText(message.getBody());
+            name.setText(message.getUser().getUsername());// in addition to message show user name
             Glide.with(mContext)
                     .load(message.getUser().getParseFile("Profile_pic").getUrl())
                     .circleCrop() // create an effect of a round profile picture
                     .into(imageOther);
-            body.setText(message.getBody());
-            name.setText(message.getUser().getUsername());// in addition to message show user name
         }
     }
 
@@ -141,6 +156,25 @@ public class ChatAdapter extends RecyclerView.Adapter<ChatAdapter.MessageViewHol
         }
         return "https://www.gravatar.com/avatar/" + hex + "?d=identicon";
     }
+
+    public void addMoreMessages(List<Message> newMessages) {
+        mMessages.addAll(newMessages);
+        submitList((PagedList<Message>) mMessages); // DiffUtil takes care of the check
+    }
+
+    public static final DiffUtil.ItemCallback<Message> DIFF_CALLBACK =
+            new DiffUtil.ItemCallback<Message>() {
+                @Override
+                public boolean areItemsTheSame(Message oldItem, Message newItem) {
+                    return oldItem.getObjectId() == newItem.getObjectId();
+                }
+                @Override
+                public boolean areContentsTheSame(Message oldItem, Message newItem) {
+                    return (oldItem.getBody().equals(newItem.getBody()));
+                }
+            };
+
+
 
 
 }

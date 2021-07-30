@@ -1,26 +1,35 @@
 package com.example.campus.ui.home;
 
+import android.app.Activity;
+import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.campus.ChooseChatActivity;
 import com.example.campus.Club;
 import com.example.campus.MyScaleGestures;
+import com.example.campus.ParseApplication;
 import com.example.campus.databinding.FragmentHomeBinding;
 import com.parse.FindCallback;
 import com.parse.ParseException;
@@ -53,12 +62,15 @@ public class HomeFragment extends Fragment {
     List<Club> allClubs= new ArrayList<>();
     private float width;
     private float height;
+    private float mRealSizeWidth;
+    private float mRealSizeHeight;
     JSONObject jsonObject= new JSONObject();
     public static final String TAG = "HomeFragment";
     Bitmap bitmap;
 
 
 
+    @RequiresApi(api = Build.VERSION_CODES.R)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         // create context
@@ -187,8 +199,11 @@ public class HomeFragment extends Fragment {
         // assign values for height and width of screen
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
-        height = displayMetrics.heightPixels - getNavigationBarHeight() -BUTTON_HEIGHT;
+
+
+        height = displayMetrics.heightPixels- getNavigationBarHeight()- BUTTON_HEIGHT;
         width = displayMetrics.widthPixels-BUTTON_WIDTH;
+
 
         return root;
 
@@ -210,9 +225,12 @@ public class HomeFragment extends Fragment {
             ArrayList<Float> sample = getRandomPosition(width, height);
 
             RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(BUTTON_WIDTH, BUTTON_HEIGHT);
+            float newHeight = sample.get(1);
+            float newWidth = sample.get(0);
+            params.leftMargin = (int) newWidth;
+            params.topMargin = (int) newHeight;
 
-            params.leftMargin = Math.round(sample.get(0));
-            params.topMargin = Math.round(sample.get(1));
+
 
 
 
@@ -324,7 +342,7 @@ public class HomeFragment extends Fragment {
 
 
     private int getNavigationBarHeight() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1) {
+        if (/*Build.VERSION.SDK_INT >= Build.VERSION_CODES.JELLY_BEAN_MR1*/Build.VERSION.SDK_INT >=19 ) {
             DisplayMetrics metrics = new DisplayMetrics();
             getActivity().getWindowManager().getDefaultDisplay().getMetrics(metrics);
             int usableHeight = metrics.heightPixels;

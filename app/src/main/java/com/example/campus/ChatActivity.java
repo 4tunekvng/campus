@@ -1,9 +1,16 @@
 package com.example.campus;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
+import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.paging.LivePagedListBuilder;
+import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -50,6 +57,10 @@ public class ChatActivity extends AppCompatActivity {
     ChatAdapter mAdapter;
     private Object LoginResult;
     Club club;
+    LiveData<PagedList<Message>> messages;
+    ParseDataSourceFactory sourceFactory;
+    PagedList.Config pagedListConfig;
+    Context thisContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,10 +71,40 @@ public class ChatActivity extends AppCompatActivity {
         // User login
         if (ParseUser.getCurrentUser() != null) { // start with existing user
             startWithCurrentUser();
+            // initial page size to fetch can be configured here
+            pagedListConfig =
+                    new PagedList.Config.Builder().setEnablePlaceholders(true)
+                            .setPrefetchDistance(10)
+                            .setInitialLoadSizeHint(20)
+                            .setPageSize(10).build();
+
+            sourceFactory = new ParseDataSourceFactory();
+            final String userId = ParseUser.getCurrentUser().getObjectId();
+            final ParseUser user = ParseUser.getCurrentUser();
+
+            messages = new LivePagedListBuilder<>(sourceFactory, pagedListConfig).build();
+            mAdapter = new ChatAdapter(ChatActivity.this, user, userId);
+            rvChat = (RecyclerView) findViewById(R.id.rvChat);
+
+            rvChat.setAdapter(mAdapter);
+            // associate the LayoutManager with the RecyclerView
+            final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
+            linearLayoutManager.setReverseLayout(true);
+            rvChat.setLayoutManager(linearLayoutManager);
+            thisContext = this;
+
+            messages.observe(this, new Observer<PagedList<Message>>() {
+                @Override
+                public void onChanged(@Nullable PagedList<Message> chats) {
+                    mAdapter.submitList(chats);
+                }
+            });
+
         }
         else { // If not logged in, login as a new anonymous user
             login();
         }
+
 
 
     }
@@ -78,18 +119,16 @@ public class ChatActivity extends AppCompatActivity {
         // Find the text field and button
         etMessage = (EditText) findViewById(R.id.etMessage);
         ibSend = (ImageButton) findViewById(R.id.ibSend);
-        rvChat = (RecyclerView) findViewById(R.id.rvChat);
+
         mMessages = new ArrayList<>();
         mFirstLoad = true;
         final String userId = ParseUser.getCurrentUser().getObjectId();
         final ParseUser user = ParseUser.getCurrentUser();
-        mAdapter = new ChatAdapter(ChatActivity.this, user, userId, mMessages);
-        rvChat.setAdapter(mAdapter);
+        //mAdapter = new ChatAdapter(ChatActivity.this, user, userId, mMessages);
 
-        // associate the LayoutManager with the RecylcerView
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
-        linearLayoutManager.setReverseLayout(true);
-        rvChat.setLayoutManager(linearLayoutManager);
+
+
+
 
         // When send button is clicked, create message object on Parse
         ibSend.setOnClickListener(new View.OnClickListener() {
@@ -108,7 +147,8 @@ public class ChatActivity extends AppCompatActivity {
                         if (e == null) {
                             Toast.makeText(ChatActivity.this, "Successfully created message on Parse",
                                     Toast.LENGTH_SHORT).show();
-                            refreshMessages();
+                            //refreshMessages();
+
                         } else {
                             Toast.makeText(ChatActivity.this, "Failed to save message" +e.toString(),
                                     Toast.LENGTH_SHORT).show();
@@ -128,61 +168,40 @@ public class ChatActivity extends AppCompatActivity {
 
     // Query messages from Parse so we can load them into the chat adapter
     void refreshMessages() {
-        // Construct query to execute
-        ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
-        // select only chats related to the club
-        query.whereEqualTo("club", club);
-        // Configure limit and sort order
-        query.orderByDescending("createdAt");
-        query.include(Message.USER_KEY);
-        query.include(Message.CLUB_KEY);
 
-        // get the latest 50 messages, order will show up newest to oldest of this group
-
-        query.setLimit(MAX_CHAT_MESSAGES_TO_SHOW);
-        // Execute query to fetch all messages from Parse asynchronously
-        // This is equivalent to a SELECT query with SQL
-        query.findInBackground(new FindCallback<Message>() {
-            public void done(List<Message> messages, ParseException e) {
-                if (e == null) {
-                    mMessages.clear();
-                    mMessages.addAll(messages);
-                    mAdapter.notifyDataSetChanged(); // update adapter
-                    // Scroll to the bottom of the list on initial load
-                    if (mFirstLoad) {
-                        rvChat.scrollToPosition(0);
-                        mFirstLoad = false;
-                    }
-                } else {
-                    Toast.makeText(ChatActivity.this, "Error Loading Messages" +e.toString(),
-                            Toast.LENGTH_SHORT).show();
-                }
+        sourceFactory = new ParseDataSourceFactory();
+        messages = new LivePagedListBuilder<>(sourceFactory, pagedListConfig).build();
+        messages.observe(this, new Observer<PagedList<Message>>() {
+            @Override
+            public void onChanged(@Nullable PagedList<Message> chats) {
+                mAdapter.submitList(chats);
             }
         });
+        mAdapter.notifyDataSetChanged();
     }
     // Create a handler which can run code periodically
-    static final long POLL_INTERVAL = TimeUnit.SECONDS.toMillis(3);
-    Handler myHandler = new android.os.Handler();
-    Runnable mRefreshMessagesRunnable = new Runnable() {
-        @Override
-        public void run() {
-            refreshMessages();
-            myHandler.postDelayed(this, POLL_INTERVAL);
-        }
-    };
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-
-        // Only start checking for new messages when the app becomes active in foreground
-        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
-    }
-
-    @Override
-    protected void onPause() {
-        // Stop background task from refreshing messages, to avoid unnecessary traffic & battery drain
-        myHandler.removeCallbacksAndMessages(null);
-        super.onPause();
-    }
+//    static final long POLL_INTERVAL = TimeUnit.SECONDS.toMillis(3);
+//    Handler myHandler = new android.os.Handler();
+//    Runnable mRefreshMessagesRunnable = new Runnable() {
+//        @Override
+//        public void run() {
+//            refreshMessages();
+//            myHandler.postDelayed(this, POLL_INTERVAL);
+//        }
+//    };
+//
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//
+//        // Only start checking for new messages when the app becomes active in foreground
+//        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
+//    }
+//
+//    @Override
+//    protected void onPause() {
+//        // Stop background task from refreshing messages, to avoid unnecessary traffic & battery drain
+//        myHandler.removeCallbacksAndMessages(null);
+//        super.onPause();
+//    }
 }
