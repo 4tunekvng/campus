@@ -179,29 +179,5 @@ public class ChatActivity extends AppCompatActivity {
         });
         mAdapter.notifyDataSetChanged();
     }
-    // Create a handler which can run code periodically
-//    static final long POLL_INTERVAL = TimeUnit.SECONDS.toMillis(3);
-//    Handler myHandler = new android.os.Handler();
-//    Runnable mRefreshMessagesRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            refreshMessages();
-//            myHandler.postDelayed(this, POLL_INTERVAL);
-//        }
-//    };
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        // Only start checking for new messages when the app becomes active in foreground
-//        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        // Stop background task from refreshing messages, to avoid unnecessary traffic & battery drain
-//        myHandler.removeCallbacksAndMessages(null);
-//        super.onPause();
-//    }
+
 }
