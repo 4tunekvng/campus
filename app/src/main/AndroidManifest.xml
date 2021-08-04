@@ -7,10 +7,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
 
-    <!-- Limits app visibility in the Google Play Store to ARCore supported devices
-         (https://developers.google.com/ar/devices). -->
-    <uses-feature android:name="android.hardware.camera.ar" />
-
     <application
         android:name=".ParseApplication"
         android:allowBackup="true"
@@ -19,7 +15,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.campus">
-        <activity android:name=".CreateAnnouncementActivity"></activity>
+        <activity
+            android:name=".CreateGroupActvity"
+            android:exported="true" />
+        <activity android:name=".CreateAnnouncementActivity" />
         <activity android:name=".AnnouncementsActivity" />
         <activity android:name=".ChooseChatActivity" />
         <activity android:name=".SettingsActivity" />
@@ -81,19 +80,23 @@
                 <data android:scheme="@string/fb_login_protocol_scheme" />
             </intent-filter>
         </activity>
+
         <meta-data
             android:name="com.parse.SERVER_URL"
-            android:value="https://atcampus.b4a.io"/>
+            android:value="https://atcampus.b4a.io" />
         <meta-data
             android:name="com.parse.APPLICATION_ID"
             android:value="RQcFkxORLNTdGO6Paq5tBUObHAY4w2pArc001ceK" />
         <meta-data
             android:name="com.parse.CLIENT_KEY"
             android:value="wUsKiWAWJMXiZYL4iyB6HhkGryPZsfOAJvpJswza" />
-        <!-- "AR Required" app, requires "Google Play Services for AR" (ARCore)
-         to be installed, as the app does not include any non-AR features. -->
-        <meta-data android:name="com.google.ar.core" android:value="required" />
-
+        <!--
+ "AR Required" app, requires "Google Play Services for AR" (ARCore)
+         to be installed, as the app does not include any non-AR features.
+        -->
+        <meta-data
+            android:name="com.google.ar.core"
+            android:value="optional" />
     </application>
 
 </manifest>

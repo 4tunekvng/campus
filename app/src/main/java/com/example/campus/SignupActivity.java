@@ -113,12 +113,13 @@ public class SignupActivity extends AppCompatActivity {
         finish();
     }
 
+
     // handle on click text view
-    public void to_signin(View v){
-        TextView tvSignIn = findViewById(R.id.tvSignIn);
+    public void to_login(View v){
+        TextView tvSignIn = findViewById(R.id.tvforSignIn);
         tvSignIn.setTextColor(Color.BLUE);
-        Intent to_signin = new Intent(this , LoginActivity.class);
-        startActivity(to_signin);
+        Intent to_login = new Intent(this , LoginActivity.class);
+        startActivity(to_login);
         finish();
     }
 

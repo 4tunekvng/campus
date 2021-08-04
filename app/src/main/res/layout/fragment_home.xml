@@ -13,6 +13,7 @@
     tools:context=".ui.home.HomeFragment" >
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/floatingAction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentEnd="true"
@@ -24,7 +25,8 @@
         android:backgroundTint="@color/white"
         android:labelFor="@+id/floatingAction"
         android:src="@drawable/baseline_group_add_18"
-        app:fabSize="normal" />
+        app:fabSize="normal"
+        tools:ignore="SpeakableTextPresentCheck" />
 
 </RelativeLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

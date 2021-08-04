@@ -1,22 +1,15 @@
 package com.example.campus.ui.home;
 
-import android.app.Activity;
-import android.app.Application;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
-import android.graphics.Point;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
-import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -28,10 +21,9 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.campus.ChooseChatActivity;
-import com.example.campus.CircleTransform;
 import com.example.campus.Club;
+import com.example.campus.CreateGroupActvity;
 import com.example.campus.MyScaleGestures;
-import com.example.campus.ParseApplication;
 import com.example.campus.R;
 import com.example.campus.databinding.FragmentHomeBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -101,7 +93,20 @@ public class HomeFragment extends Fragment {
         navView = view.findViewById(R.id.nav_view);
         // create context
         thiscontext = getContext();
+
+        // get the home layout and set on Touch listener for zoom on pinch
         binding.homelayout.setOnTouchListener(new MyScaleGestures(thiscontext));
+
+        // get the floating action button and set on click listener
+        binding.floatingAction.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                // push an intent to the createGroupActivity
+                Intent intent = new Intent(thiscontext, CreateGroupActvity.class);
+                thiscontext.startActivity(intent);
+
+            }
+        });
 
         // create JSONObject of facebook ids in Northwestern parent
         JSONObject obj = null;
@@ -209,9 +214,11 @@ public class HomeFragment extends Fragment {
                     } catch (JSONException e) {
                         e.printStackTrace();
                     }
+                    // set onClickListener on Button
                     ib.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            // push an intent to ChooseChatActivity
                             Intent intent = new Intent(thiscontext, ChooseChatActivity.class);
                             intent.putExtra(Club.class.getSimpleName(), Parcels.wrap(currentClub));
                             thiscontext.startActivity(intent);
