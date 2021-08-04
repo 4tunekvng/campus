@@ -213,4 +213,6 @@ public class ChatActivity extends AppCompatActivity {
         mostRecentDataSource.invalidate();
     }
 
+
 }
+
