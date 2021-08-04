@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
@@ -33,6 +34,7 @@ import com.example.campus.MyScaleGestures;
 import com.example.campus.ParseApplication;
 import com.example.campus.R;
 import com.example.campus.databinding.FragmentHomeBinding;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
@@ -77,19 +79,28 @@ public class HomeFragment extends Fragment {
     final int margin = 5;
     final Transformation transformation = (Transformation) new RoundedCornersTransformation(radius,margin);
 
+    BottomNavigationView navView;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        // create context
-        thiscontext = container.getContext();
 
-
-        homeViewModel =
-                new ViewModelProvider(this).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        return root;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+
+
+        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);
+        navView = view.findViewById(R.id.nav_view);
+        // create context
+        thiscontext = getContext();
         binding.homelayout.setOnTouchListener(new MyScaleGestures(thiscontext));
 
         // create JSONObject of facebook ids in Northwestern parent
@@ -109,12 +120,10 @@ public class HomeFragment extends Fragment {
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getActivity().getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
 
-
-        height = displayMetrics.heightPixels- getNavigationBarHeight()- BUTTON_HEIGHT;
+        int fragmentBarHeight = 0;
+        height = displayMetrics.heightPixels- getNavigationBarHeight()- BUTTON_HEIGHT - fragmentBarHeight;
         width = displayMetrics.widthPixels-BUTTON_WIDTH;
 
-
-        return root;
 
 
     }
