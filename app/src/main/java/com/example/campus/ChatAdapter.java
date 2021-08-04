@@ -32,14 +32,6 @@ public class ChatAdapter extends PagedListAdapter<Message,ChatAdapter.MessageVie
     private static final int MESSAGE_OUTGOING = 123;
     private static final int MESSAGE_INCOMING = 321;
 
-//    public ChatAdapter(Context context, ParseUser user, String userId, List<Message> messages) {
-//        super(DIFF_CALLBACK);
-//        mMessages = messages;
-//        this.mUserId = userId;
-//        this.mUser = user;
-//        mContext = context;
-//
-//    }
 
     public ChatAdapter(Context context, ParseUser user, String userId) {
         super(DIFF_CALLBACK);
@@ -68,11 +60,15 @@ public class ChatAdapter extends PagedListAdapter<Message,ChatAdapter.MessageVie
     @Override
     public void onBindViewHolder(MessageViewHolder holder, int position) {
         Message message = getItem(position);
-        if (message == null)
-        {
+
+        if (message != null) {
+            holder.bindMessage(message);
+        } else {
+            // Null defines a placeholder item - PagedListAdapter automatically
+            // invalidates this row when the actual object is loaded from the
+            // database.
             return;
         }
-        holder.bindMessage(message);
     }
 
 
@@ -86,7 +82,11 @@ public class ChatAdapter extends PagedListAdapter<Message,ChatAdapter.MessageVie
     }
     private boolean isMe(int position) {
         Message message = getItem(position);
-        return message.getUserId() != null && message.getUserId().equals(mUserId);
+        if(message!= null){
+            return message.getUserId() != null && message.getUserId().equals(mUserId);
+        }
+        return false;
+
     }
 
     public abstract class MessageViewHolder extends RecyclerView.ViewHolder {

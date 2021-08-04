@@ -8,12 +8,13 @@ android {
 
     defaultConfig {
         applicationId "com.example.campus"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {
@@ -29,6 +30,12 @@ android {
     buildFeatures {
         viewBinding true
     }
+}
+
+ext {
+    appCompatVersion = '1.0.0'
+    designSupportVersion = '1.0.0'
+    recyclerViewVersion = '1.0.0'
 }
 
 dependencies {
@@ -68,6 +75,18 @@ dependencies {
     implementation group: 'com.squareup.okhttp3', name: 'okhttp', version: '5.0.0-alpha.2'
     implementation "androidx.paging:paging-runtime:2.1.2"
     implementation "androidx.lifecycle:lifecycle-livedata:2.3.0"
+    implementation 'com.github.parse-community:ParseLiveQuery-Android:1.1.0'
+    implementation "androidx.percentlayout:percentlayout:1.0.0"
+    implementation "androidx.vectordrawable:vectordrawable:1.0.0" // VectorDrawableCompat
+    implementation "androidx.vectordrawable:vectordrawable-animated:1.0.0" // AnimatedVectorDrawableCompat
+    implementation "androidx.transition:transition:1.1.0"
+    implementation "androidx.annotation:annotation:1.1.0"
+    implementation 'jp.wasabeef:picasso-transformations:2.1.0'
+    implementation "androidx.cardview:cardview:1.0.0"
+    testImplementation "androidx.paging:paging-common:2.1.2"
+    implementation "androidx.paging:paging-rxjava2:2.1.2"
+    implementation 'com.google.android.material:material:1.1.0'
+    implementation 'com.google.ar:core:1.25.0'
 
 
 }

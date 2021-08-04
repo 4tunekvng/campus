@@ -5,7 +5,11 @@ import androidx.paging.PositionalDataSource;
 
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.List;
 
 public class ParsePositionalDataSource extends PositionalDataSource<Message> {
@@ -26,9 +30,11 @@ public class ParsePositionalDataSource extends PositionalDataSource<Message> {
         // get basic query
         ParseQuery<Message> query = getQuery();
 
+
         // Use values passed when PagedList was created.
         query.setLimit(params.requestedLoadSize);
         query.setSkip(params.requestedStartPosition);
+
 
         try {
             // loadInitial() should run queries synchronously so the initial list will not be empty
@@ -41,11 +47,14 @@ public class ParsePositionalDataSource extends PositionalDataSource<Message> {
         } catch (ParseException e) {
             // retry logic here
         }
+
+
     }
 
 
     @Override
     public void loadRange(@NonNull LoadRangeParams params, @NonNull LoadRangeCallback<Message> callback) {
+
         // get basic query
         ParseQuery<Message> query = getQuery();
 

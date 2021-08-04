@@ -3,7 +3,17 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/baseline_group_add_18.xml" value="0.20052083333333334" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/baseline_group_add_20.xml" value="0.20052083333333334" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/baseline_group_add_24.xml" value="0.20052083333333334" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/roundcorner.xml" value="0.18177083333333333" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/activity_announcements.xml" value="0.16927083333333334" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/activity_chat.xml" value="0.190625" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/activity_main.xml" value="0.18177083333333333" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/fragment_home.xml" value="0.184375" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/fragment_search.xml" value="0.23854166666666668" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/item_clubs.xml" value="0.165625" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/item_post.xml" value="0.16" />
       </map>
     </option>
   </component>

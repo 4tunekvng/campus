@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.Observer;
+import androidx.paging.DataSource;
 import androidx.paging.LivePagedListBuilder;
 import androidx.paging.PagedList;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -31,6 +32,8 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SaveCallback;
+import com.parse.livequery.ParseLiveQueryClient;
+import com.parse.livequery.SubscriptionHandling;
 
 import org.parceler.Parcels;
 
@@ -61,6 +64,7 @@ public class ChatActivity extends AppCompatActivity {
     ParseDataSourceFactory sourceFactory;
     PagedList.Config pagedListConfig;
     Context thisContext;
+    private DataSource<Integer, Message> mostRecentDataSource;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,32 +76,73 @@ public class ChatActivity extends AppCompatActivity {
         if (ParseUser.getCurrentUser() != null) { // start with existing user
             startWithCurrentUser();
             // initial page size to fetch can be configured here
-            pagedListConfig =
+            PagedList.Config pagedListConfig =
                     new PagedList.Config.Builder().setEnablePlaceholders(true)
                             .setPrefetchDistance(10)
                             .setInitialLoadSizeHint(20)
                             .setPageSize(10).build();
 
             sourceFactory = new ParseDataSourceFactory();
+
             final String userId = ParseUser.getCurrentUser().getObjectId();
             final ParseUser user = ParseUser.getCurrentUser();
-
             messages = new LivePagedListBuilder<>(sourceFactory, pagedListConfig).build();
-            mAdapter = new ChatAdapter(ChatActivity.this, user, userId);
             rvChat = (RecyclerView) findViewById(R.id.rvChat);
-
-            rvChat.setAdapter(mAdapter);
+            mAdapter = new ChatAdapter(ChatActivity.this, user, userId);
             // associate the LayoutManager with the RecyclerView
             final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(ChatActivity.this);
             linearLayoutManager.setReverseLayout(true);
             rvChat.setLayoutManager(linearLayoutManager);
             thisContext = this;
-
             messages.observe(this, new Observer<PagedList<Message>>() {
                 @Override
                 public void onChanged(@Nullable PagedList<Message> chats) {
                     mAdapter.submitList(chats);
+
                 }
+            });
+            rvChat.setAdapter(mAdapter);
+
+            String websocketUrl = "https://atcampus.b4a.io"; // ⚠️ TYPE IN A VALID WSS:// URL HERE
+
+            ParseLiveQueryClient parseLiveQueryClient = null;
+            try {
+                parseLiveQueryClient = ParseLiveQueryClient.Factory.getClient(new URI(websocketUrl));
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+            }
+
+            ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+            // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
+            // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
+
+            // Connect to Parse server
+            SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
+
+            // Listen for CREATE events on the Message class
+            subscriptionHandling.handleEvent(SubscriptionHandling.Event.CREATE, (query, object) -> {
+                sourceFactory.source.invalidate();
+
+
+                // RecyclerView updates need to be run on the UI thread
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        mAdapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
+                            @Override
+                            public void onItemRangeInserted(int positionStart, int itemCount) {
+                                super.onItemRangeInserted(positionStart, itemCount);
+                                if (positionStart ==0){
+                                    rvChat.scrollToPosition(0);
+                                }
+                            }
+                        });
+
+
+
+                    }
+                });
             });
 
         }
@@ -105,9 +150,8 @@ public class ChatActivity extends AppCompatActivity {
             login();
         }
 
-
-
     }
+
 
     // Get the userId from the cached currentUser object
     void startWithCurrentUser() {
@@ -124,7 +168,6 @@ public class ChatActivity extends AppCompatActivity {
         mFirstLoad = true;
         final String userId = ParseUser.getCurrentUser().getObjectId();
         final ParseUser user = ParseUser.getCurrentUser();
-        //mAdapter = new ChatAdapter(ChatActivity.this, user, userId, mMessages);
 
 
 
@@ -147,7 +190,6 @@ public class ChatActivity extends AppCompatActivity {
                         if (e == null) {
                             Toast.makeText(ChatActivity.this, "Successfully created message on Parse",
                                     Toast.LENGTH_SHORT).show();
-                            //refreshMessages();
 
                         } else {
                             Toast.makeText(ChatActivity.this, "Failed to save message" +e.toString(),
@@ -166,42 +208,9 @@ public class ChatActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-    // Query messages from Parse so we can load them into the chat adapter
-    void refreshMessages() {
 
-        sourceFactory = new ParseDataSourceFactory();
-        messages = new LivePagedListBuilder<>(sourceFactory, pagedListConfig).build();
-        messages.observe(this, new Observer<PagedList<Message>>() {
-            @Override
-            public void onChanged(@Nullable PagedList<Message> chats) {
-                mAdapter.submitList(chats);
-            }
-        });
-        mAdapter.notifyDataSetChanged();
+    public void invalidateDataSource() {
+        mostRecentDataSource.invalidate();
     }
-    // Create a handler which can run code periodically
-//    static final long POLL_INTERVAL = TimeUnit.SECONDS.toMillis(3);
-//    Handler myHandler = new android.os.Handler();
-//    Runnable mRefreshMessagesRunnable = new Runnable() {
-//        @Override
-//        public void run() {
-//            refreshMessages();
-//            myHandler.postDelayed(this, POLL_INTERVAL);
-//        }
-//    };
-//
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//
-//        // Only start checking for new messages when the app becomes active in foreground
-//        myHandler.postDelayed(mRefreshMessagesRunnable, POLL_INTERVAL);
-//    }
-//
-//    @Override
-//    protected void onPause() {
-//        // Stop background task from refreshing messages, to avoid unnecessary traffic & battery drain
-//        myHandler.removeCallbacksAndMessages(null);
-//        super.onPause();
-//    }
+
 }

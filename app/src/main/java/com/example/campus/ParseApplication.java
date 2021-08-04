@@ -35,10 +35,12 @@ public class ParseApplication extends Application {
         Parse.initialize(new Parse.Configuration.Builder(this)
                         .applicationId("RQcFkxORLNTdGO6Paq5tBUObHAY4w2pArc001ceK")
                         .clientKey("wUsKiWAWJMXiZYL4iyB6HhkGryPZsfOAJvpJswza")
-                        .server("https://parseapi.back4app.com")
+                        /*.server("https://parseapi.back4app.com")*/
+                        .server("https://atcampus.b4a.io")
                         .build()
 
         );
+
         ParseFacebookUtils.initialize(this);
 
     }

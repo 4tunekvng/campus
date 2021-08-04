@@ -27,14 +27,17 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.ViewModelProvider;
 
 import com.example.campus.ChooseChatActivity;
+import com.example.campus.CircleTransform;
 import com.example.campus.Club;
 import com.example.campus.MyScaleGestures;
 import com.example.campus.ParseApplication;
+import com.example.campus.R;
 import com.example.campus.databinding.FragmentHomeBinding;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
 import com.squareup.picasso.Picasso;
+import com.squareup.picasso.Transformation;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -52,6 +55,9 @@ import java.util.Random;
 
 import static java.lang.Integer.parseInt;
 
+import jp.wasabeef.picasso.transformations.RoundedCornersTransformation;
+
+
 public class HomeFragment extends Fragment {
 
     public static final int BUTTON_WIDTH = 150;
@@ -67,6 +73,9 @@ public class HomeFragment extends Fragment {
     JSONObject jsonObject= new JSONObject();
     public static final String TAG = "HomeFragment";
     Bitmap bitmap;
+    final int radius = 10;
+    final int margin = 5;
+    final Transformation transformation = (Transformation) new RoundedCornersTransformation(radius,margin);
 
 
 
@@ -240,7 +249,7 @@ public class HomeFragment extends Fragment {
                 ImageButton ib = new ImageButton(thiscontext);
                 Club currentClub = clubs.get(i);
                 try {
-                    Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
+                    Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).transform(transformation).fit().centerCrop().into(ib);
                     rl.addView(ib, params);
                     json.put("id", clubs.get(i).getId().toString());
                     json.put("left",String.valueOf(params.leftMargin));
@@ -281,7 +290,7 @@ public class HomeFragment extends Fragment {
                     ImageButton ib = new ImageButton(thiscontext);
                     Club currentClub = clubs.get(i);
                     try {
-                        Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).fit().centerCrop().into(ib);
+                        Picasso.with(getContext()).load(Uri.parse(String.valueOf(clubs.get(i).getPicture().get("url")))).transform(transformation).fit().centerCrop().into(ib);
                         rl.addView(ib, params);
                         json.put("id", clubs.get(i).getId().toString());
                         json.put("left",String.valueOf(params.leftMargin));
