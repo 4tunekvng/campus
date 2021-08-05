@@ -1,5 +1,6 @@
 package com.example.campus.ui.home;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -70,6 +71,7 @@ public class HomeFragment extends Fragment {
     final int radius = 10;
     final int margin = 5;
     final Transformation transformation = (Transformation) new RoundedCornersTransformation(radius,margin);
+    private Dialog dialog;
 
     BottomNavigationView navView;
 
@@ -160,6 +162,7 @@ public class HomeFragment extends Fragment {
             JSONArray names = new JSONArray();
             int nameLength;
             if(jsonObject.names()== null){
+                // create the very first button
                 ImageButton ib = new ImageButton(thiscontext);
                 Club currentClub = clubs.get(i);
                 try {
@@ -173,12 +176,23 @@ public class HomeFragment extends Fragment {
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
+                // set on click listener for button
                 ib.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Intent intent = new Intent(thiscontext, ChooseChatActivity.class);
                         intent.putExtra(currentClub.getName(), Parcels.wrap(currentClub));
                         thiscontext.startActivity(intent);
+                    }
+                });
+                // set OnLongClickListener
+                ib.setOnLongClickListener(new View.OnLongClickListener() {
+                    @Override
+                    public boolean onLongClick(View v) {
+                        // Set up dialog
+                        dialog = new Dialog(thiscontext);
+                        dialog.setContentView(R.layout.club_detail);
+                        return true;
                     }
                 });
             }
@@ -222,6 +236,17 @@ public class HomeFragment extends Fragment {
                             Intent intent = new Intent(thiscontext, ChooseChatActivity.class);
                             intent.putExtra(Club.class.getSimpleName(), Parcels.wrap(currentClub));
                             thiscontext.startActivity(intent);
+                        }
+                    });
+                    // set OnLongClickListener
+                    ib.setOnLongClickListener(new View.OnLongClickListener() {
+                        @Override
+                        public boolean onLongClick(View v) {
+                            // Set up dialog
+                            dialog = new Dialog(thiscontext);
+                            dialog.setContentView(R.layout.club_detail);
+                            //dialog.findViewById()
+                            return true;
                         }
                     });
                 }
