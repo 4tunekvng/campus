@@ -82,7 +82,7 @@ public class ChatActivity extends AppCompatActivity {
                             .setInitialLoadSizeHint(20)
                             .setPageSize(10).build();
 
-            sourceFactory = new ParseDataSourceFactory();
+            sourceFactory = new ParseDataSourceFactory(club);
 
             final String userId = ParseUser.getCurrentUser().getObjectId();
             final ParseUser user = ParseUser.getCurrentUser();
@@ -113,6 +113,12 @@ public class ChatActivity extends AppCompatActivity {
             }
 
             ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
+            // select only chats related to the club
+            parseQuery.whereEqualTo("club", club);
+            // Configure limit and sort order
+            parseQuery.orderByDescending("createdAt");
+            parseQuery.include(Message.USER_KEY);
+            parseQuery.include(Message.CLUB_KEY);
             // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
             // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
 

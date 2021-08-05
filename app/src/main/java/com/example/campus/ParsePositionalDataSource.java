@@ -13,11 +13,18 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 public class ParsePositionalDataSource extends PositionalDataSource<Message> {
+    public Club club;
+
+    public ParsePositionalDataSource(Club club) {
+        this.club = club;
+    }
 
     // define basic query here
     public ParseQuery<Message> getQuery() {
         // Construct query to execute
         ParseQuery<Message> query = ParseQuery.getQuery(Message.class);
+        // select only chats related to the club
+        query.whereEqualTo("club", club);
         // Configure limit and sort order
         query.orderByDescending("createdAt");
         query.include(Message.USER_KEY);

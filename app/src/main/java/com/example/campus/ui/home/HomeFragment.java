@@ -192,6 +192,7 @@ public class HomeFragment extends Fragment {
                         // Set up dialog
                         dialog = new Dialog(thiscontext);
                         dialog.setContentView(R.layout.club_detail);
+                        dialog.show();
                         return true;
                     }
                 });
@@ -245,7 +246,7 @@ public class HomeFragment extends Fragment {
                             // Set up dialog
                             dialog = new Dialog(thiscontext);
                             dialog.setContentView(R.layout.club_detail);
-                            //dialog.findViewById()
+                            dialog.show();
                             return true;
                         }
                     });
