@@ -112,6 +112,8 @@ public class ChatActivity extends AppCompatActivity {
                 e.printStackTrace();
             }
 
+
+            // parse query
             ParseQuery<Message> parseQuery = ParseQuery.getQuery(Message.class);
             // select only chats related to the club
             parseQuery.whereEqualTo("club", club);
@@ -119,8 +121,7 @@ public class ChatActivity extends AppCompatActivity {
             parseQuery.orderByDescending("createdAt");
             parseQuery.include(Message.USER_KEY);
             parseQuery.include(Message.CLUB_KEY);
-            // This query can even be more granular (i.e. only refresh if the entry was added by some other user)
-            // parseQuery.whereNotEqualTo(USER_ID_KEY, ParseUser.getCurrentUser().getObjectId());
+
 
             // Connect to Parse server
             SubscriptionHandling<Message> subscriptionHandling = parseLiveQueryClient.subscribe(parseQuery);
@@ -213,12 +214,6 @@ public class ChatActivity extends AppCompatActivity {
         Intent i = new Intent(this , LoginActivity.class);
         startActivity(i);
     }
-
-
-    public void invalidateDataSource() {
-        mostRecentDataSource.invalidate();
-    }
-
 
 }
 

@@ -11,6 +11,8 @@ public class Message extends ParseObject {
     public static final String USER_KEY = "user";
     public static final String CLUB_KEY = "club";
 
+
+    // getters for message fields
     public String getUserId() {
         return getString(USER_ID_KEY);
     }
@@ -27,6 +29,8 @@ public class Message extends ParseObject {
         return (Club) getParseObject(CLUB_KEY);
     }
 
+
+    // setters for message fields
     public void setUserId(String userId) {
         put(USER_ID_KEY, userId);
     }
