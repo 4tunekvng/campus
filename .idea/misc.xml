@@ -3,10 +3,14 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/animated_confetti.xml" value="0.17477477477477477" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/baseline_group_add_18.xml" value="0.20052083333333334" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/baseline_group_add_20.xml" value="0.20052083333333334" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/baseline_group_add_24.xml" value="0.20052083333333334" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/roundcorner.xml" value="0.18177083333333333" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/star.xml" value="0.22027027027027027" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/starss.xml" value="0.1481981981981982" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/drawable/water.xml" value="0.23378378378378378" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/activity_announcements.xml" value="0.16927083333333334" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/activity_chat.xml" value="0.190625" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/activity_create_group_actvity.xml" value="0.21981981981981982" />
@@ -17,9 +21,11 @@
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/club_detail.xml" value="0.21981981981981982" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/fragment_dashboard.xml" value="0.21981981981981982" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/fragment_home.xml" value="0.184375" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/fragment_notifications.xml" value="0.21981981981981982" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/fragment_search.xml" value="0.23854166666666668" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/item_clubs.xml" value="0.165625" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/item_post.xml" value="0.16" />
+        <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/layout/message_incoming.xml" value="0.2063063063063063" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/menu/bottom_nav_menu.xml" value="0.1" />
         <entry key="..\:/Users/fortunekvng/AndroidStudioProjects/campus/app/src/main/res/menu/menu_club_list.xml" value="0.1" />
       </map>

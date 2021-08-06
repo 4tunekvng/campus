@@ -1,5 +1,7 @@
 package com.example.campus.ui.home;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
@@ -8,9 +10,11 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.widget.ImageButton;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
@@ -31,6 +35,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseQuery;
+import com.plattysoft.leonids.ParticleSystem;
 import com.squareup.picasso.Picasso;
 import com.squareup.picasso.Transformation;
 
@@ -72,8 +77,10 @@ public class HomeFragment extends Fragment {
     final int margin = 5;
     final Transformation transformation = (Transformation) new RoundedCornersTransformation(radius,margin);
     private Dialog dialog;
+    ViewGroup containerHome;
 
     BottomNavigationView navView;
+    ViewTreeObserver viewTreeObserver;
 
 
     @RequiresApi(api = Build.VERSION_CODES.R)
@@ -82,6 +89,7 @@ public class HomeFragment extends Fragment {
 
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        containerHome = container;
         return root;
     }
 
@@ -103,6 +111,7 @@ public class HomeFragment extends Fragment {
         binding.floatingAction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 // push an intent to the createGroupActivity
                 Intent intent = new Intent(thiscontext, CreateGroupActvity.class);
                 thiscontext.startActivity(intent);
@@ -131,6 +140,30 @@ public class HomeFragment extends Fragment {
         height = displayMetrics.heightPixels- getNavigationBarHeight()- BUTTON_HEIGHT - fragmentBarHeight;
         width = displayMetrics.widthPixels-BUTTON_WIDTH;
 
+        viewTreeObserver = view.getViewTreeObserver();
+        if (viewTreeObserver.isAlive()) {
+            viewTreeObserver.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+                @SuppressLint("UseCompatLoadingForDrawables")
+                @Override
+                public void onGlobalLayout() {
+                    view.getViewTreeObserver().removeOnGlobalLayoutListener(this);
+                    new ParticleSystem((ViewGroup) view, 80,getResources().getDrawable(R.drawable.water) , 1000000000)
+                            .setSpeedByComponentsRange(0f, 0f, 0.05f, 0.1f)
+                            .setAcceleration(0.00005f, 90)
+                            .emitWithGravity(view.findViewById(R.id.homelayout), Gravity.TOP, 8);
+                }
+            });
+        }
+
+
+
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
 
 
     }
